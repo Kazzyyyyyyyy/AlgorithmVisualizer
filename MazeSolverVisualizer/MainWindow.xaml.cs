@@ -33,13 +33,17 @@ namespace MazeSolverVisualizer {
 
 
         //Controll events
-        private void GUI_generateMaze_Click(object sender, RoutedEventArgs e) 
-            => MazeGenerator.CallGenerator();
+        private void GUI_generateMaze_Click(object sender, RoutedEventArgs e) {
+            _utils.BlockGUIEventsWhileRunning();
+
+            MazeGenerator.CallGenerator();
+        }
 
         private void GUI_resetMaze_Click(object sender, RoutedEventArgs e) 
             => _utils.CleanVisualizer();
         
         private void GUI_solve_Click(object sender, RoutedEventArgs e) {
+            _utils.BlockGUIEventsWhileRunning();
 
             //GUI parse
             if (int.TryParse(_mainWindow.GUI_animationSleep.Text, out int parse))

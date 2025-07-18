@@ -14,18 +14,18 @@ namespace MazeSolverVisualizer {
 
         //utils 
         public static Random rndm = new();
-
+        
         //both
         public static int botY = 1, botX = 0;
         public enum MoveDirections { Left = 0, Right, Up, Down }
         public static List<MoveDirections> validDir = new();
-        public static List<(int y, int x)> moveHistory = new();
-        public static List<(int y, int x)> visUpdateCords = new();
-
+        public static List<(int y, int x)> moveHistory = new(), 
+                                           visUpdateCords = new();
+        
         //generator specific
         public static char genPrint = ' ';
-        public static bool endReached = false;
-        public static bool easyMaze = true;
+        public static bool endReached = false, 
+                           easyMaze = true;
 
         //solver specific
         public static char solvPrint = 'G';
@@ -37,12 +37,13 @@ namespace MazeSolverVisualizer {
 
         //GUI
         public static Color backgroundCol = (Color)ColorConverter.ConvertFromString("#3C3C3C");
-        public static int animationRoundNum = 0;
-        public static int animationTaskDelayIn = 100;
-        public static bool playSolveAnimation = false;
-        public static int bytesPerPixel = 4;
-        public static int cellSize = 5;
+        public static bool playSolveAnimation = true;
+
         public static WriteableBitmap visualBitmap = null!;
         public static byte[] pixelArray = null!;
+        public static int animationRoundNum = 0,
+                          animationTaskDelayIn = 100;
+        public static int bytesPerPixel = 4,
+                          cellSize = 5;
     }
 }

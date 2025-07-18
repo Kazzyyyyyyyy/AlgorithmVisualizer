@@ -27,6 +27,7 @@ namespace MazeSolverVisualizer {
         }
 
         async void Loop() {
+
             _utils.GenMazeArray();
 
             //start prepare

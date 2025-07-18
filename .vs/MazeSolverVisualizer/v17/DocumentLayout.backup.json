@@ -23,7 +23,7 @@
           ]
         },
         {
-          "DockedWidth": 230,
+          "DockedWidth": 282,
           "SelectedChildIndex": 0,
           "Children": [
             {
@@ -34,7 +34,7 @@
               "RelativeDocumentMoniker": "MazeSolverVisualizer\\MainWindow.xaml.cs",
               "ToolTip": "C:\\Users\\staer\\source\\repos\\MazeSolverVisualizer\\MazeSolverVisualizer\\MainWindow.xaml.cs",
               "RelativeToolTip": "MazeSolverVisualizer\\MainWindow.xaml.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAAB0AAAAMAAAAAAAAAA==",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAGAAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-07-17T13:33:39.058Z",
               "IsPinned": true,

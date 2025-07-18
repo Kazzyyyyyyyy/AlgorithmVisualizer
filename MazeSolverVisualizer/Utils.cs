@@ -17,6 +17,8 @@ namespace MazeSolverVisualizer {
             endReached = false;
             moveHistory.Clear();
             visUpdateCords.Clear();
+
+            _utils.BlockGUIEventsWhileRunning();
         }
 
         public static void MoveBot(MoveDirections? moveDir) {
@@ -101,6 +103,18 @@ namespace MazeSolverVisualizer {
             return true;
         }
 
+        //GUI 
+        public void BlockGUIEventsWhileRunning() {
+            foreach(UIElement el in _mainWindow.GUI_controlls.Children) {
+                if (el == _mainWindow.GUI_animationSleep)
+                    continue; 
+
+                if (el.IsEnabled)
+                    el.IsEnabled = false; 
+                else 
+                    el.IsEnabled = true;
+            }
+        }
 
         //Visualizer
         public async Task EasyVisUpdateListManager(List<(int, int)> updateCords, Color color) {

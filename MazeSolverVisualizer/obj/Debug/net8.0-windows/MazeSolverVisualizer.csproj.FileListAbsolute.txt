@@ -19,3 +19,4 @@ C:\Users\staer\source\repos\MazeSolverVisualizer\MazeSolverVisualizer\obj\Debug\
 C:\Users\staer\source\repos\MazeSolverVisualizer\MazeSolverVisualizer\obj\Debug\net8.0-windows\MazeSolverVisualizer.pdb
 C:\Users\staer\source\repos\MazeSolverVisualizer\MazeSolverVisualizer\obj\Debug\net8.0-windows\MazeSolverVisualizer.genruntimeconfig.cache
 C:\Users\staer\source\repos\MazeSolverVisualizer\MazeSolverVisualizer\obj\Debug\net8.0-windows\ref\MazeSolverVisualizer.dll
+C:\Users\staer\source\repos\MazeSolverVisualizer\MazeSolverVisualizer\obj\Debug\net8.0-windows\MazeSolverVisualizer.sourcelink.json
