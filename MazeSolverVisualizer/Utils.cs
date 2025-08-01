@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.IO;
+using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -17,8 +18,10 @@ namespace MazeSolverVisualizer {
             endReached = false;
             moveHistory.Clear();
             visUpdateCords.Clear();
+            cellsBlockedThisRound = -1;
+            cellsMoved = 0;
 
-            _utils.BlockGUIEventsWhileRunning();
+            _utils.BlockControlsWhileRunning();
         }
 
         public static void MoveBot(MoveDirections? moveDir) {
@@ -54,12 +57,12 @@ namespace MazeSolverVisualizer {
         public void GenMazeArray() {
             for (int height = 0; height < mazeSize; height++) {
                 for (int width = 0; width < mazeSize; width++) {
-                    maze[height, width] = 'X';
+                    maze[height, width] = wallPrint;
                 }
             }
 
-            maze[1, 0] = ' '; //start
-            maze[mazeSize - 2, mazeSize - 1] = ' '; //end
+            maze[1, 0] = freeCellPrint; //start
+            maze[mazeSize - 2, mazeSize - 1] = freeCellPrint; //end
 
             CreateOrUpdateVisualizer();
         }
@@ -67,8 +70,8 @@ namespace MazeSolverVisualizer {
         public void ReturnToCleanMaze() {
             for (int y = 0; y < mazeSize; y++) {
                 for (int x = 0; x < mazeSize; x++) {
-                    if (maze[y, x] == 'G') {
-                        maze[y, x] = ' ';
+                    if (maze[y, x] == solverPrint) {
+                        maze[y, x] = freeCellPrint;
                     }
                 }
             }
@@ -94,7 +97,14 @@ namespace MazeSolverVisualizer {
                 return false;
 
             return true;
-        }
+        } 
+        
+        public static bool RunLoop_DeadEndFill() {
+            if (cellsBlockedThisRound == 0)
+                return false; 
+
+            return true;
+        } 
 
         public static bool RunLoop_Solver() {
             if (botY == mazeSize - 2 && botX == mazeSize - 1)
@@ -103,8 +113,35 @@ namespace MazeSolverVisualizer {
             return true;
         }
 
+        public async Task BacktrackBestPath_moveHistory(List<(int y, int x)> moveHistory) {
+
+            visUpdateCords.Add(moveHistory.Last());
+            moveHistory.RemoveAt(moveHistory.Count - 1);
+
+            for (int i = moveHistory.Count - 1; i >= 0; i--) {
+                if (moveHistory[i].y == visUpdateCords.Last().y && (moveHistory[i].x == visUpdateCords.Last().x - 1 || moveHistory[i].x == visUpdateCords.Last().x + 1)
+                    || moveHistory[i].x == visUpdateCords.Last().x && (moveHistory[i].y == visUpdateCords.Last().y - 1 || moveHistory[i].y == visUpdateCords.Last().y + 1)) {
+                    visUpdateCords.Add(moveHistory[i]);
+                }
+            }
+
+            if (!playSolveAnimation) {
+                for (int y = 0; y < mazeSize; y++) {
+                    for (int x = 0; x < mazeSize; x++) {
+                        if (maze[y, x] == solverPrint && !visUpdateCords.Contains((y, x))) {
+                            maze[y, x] = freeCellPrint;
+                        }
+                    }
+                }
+                return;
+            }
+
+            await _utils.SyncVisualizer(visUpdateCords, Colors.Red);
+        }
+
+
         //GUI 
-        public void BlockGUIEventsWhileRunning() {
+        public void BlockControlsWhileRunning() {
             foreach(UIElement el in _mainWindow.GUI_controlls.Children) {
                 if (el == _mainWindow.GUI_animationSleep)
                     continue; 
@@ -115,6 +152,7 @@ namespace MazeSolverVisualizer {
                     el.IsEnabled = true;
             }
         }
+
 
         //Visualizer
         public async Task EasyVisUpdateListManager(List<(int, int)> updateCords, Color color) {
@@ -165,8 +203,8 @@ namespace MazeSolverVisualizer {
 
         Color GetColorForChar(char c) =>
                 c switch {
-                    'X' => Colors.White,
-                    'G' => Colors.Green,
+                    wallPrint => Colors.White,
+                    solverPrint => Colors.Green,
                     'T' => Colors.Orange,
                     _ => backgroundCol
                 };
@@ -198,7 +236,7 @@ namespace MazeSolverVisualizer {
             for (int y = 0; y < mazeSize; y++) {
                 for (int x = 0; x < mazeSize; x++) {
                     Color color = GetColorForChar(maze[y, x]);
-                    if (maze[y, x] == 'G')
+                    if (maze[y, x] == solverPrint)
                         updateForCleanMazeVisual.Add((y, x));
 
                     for (int ty = 0; ty < cellSize; ty++) {

@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-
+using System.Windows.Media;
 using static MazeSolverVisualizer.Data;
 
 
@@ -16,7 +16,11 @@ namespace MazeSolverVisualizer {
             _mainWindow = this;
             Init();
 
-            _utils.CreateOrUpdateVisualizer();
+            _utils.BlockControlsWhileRunning();
+
+            playSolveAnimation = false; 
+            MazeGenerator.CallGenerator();
+            playSolveAnimation = true;
         }
 
         void Init() {
@@ -34,7 +38,7 @@ namespace MazeSolverVisualizer {
 
         //Controll events
         private void GUI_generateMaze_Click(object sender, RoutedEventArgs e) {
-            _utils.BlockGUIEventsWhileRunning();
+            _utils.BlockControlsWhileRunning();
 
             MazeGenerator.CallGenerator();
         }
@@ -43,7 +47,7 @@ namespace MazeSolverVisualizer {
             => _utils.CleanVisualizer();
         
         private void GUI_solve_Click(object sender, RoutedEventArgs e) {
-            _utils.BlockGUIEventsWhileRunning();
+            _utils.BlockControlsWhileRunning();
 
             //GUI parse
             if (int.TryParse(_mainWindow.GUI_animationSleep.Text, out int parse))
@@ -55,19 +59,41 @@ namespace MazeSolverVisualizer {
             if(updateForCleanMazeVisual.Count > 0)
                 _utils.CleanVisualizer();
 
+            //algorithm start 
+            if (GUI_solverSelect.SelectedIndex != 2) { //dont do when call DeadEndFilling 
+                maze[botY, botX] = solverPrint;
+                moveHistory.Add((botY, botX));
+                if (playSolveAnimation)
+                    visUpdateCords.Add((botY, botX));
+            }
 
             switch (GUI_solverSelect.SelectedIndex) {
                 case 0:
-                    MazeSolver_BFS.CallSolver_BFS(); break;
+                    MazeSolver_A_Star.CallSolver_A_Star(); break; 
 
                 case 1: 
-                    MazeSolver_RightWind.CallSolver_RightWind(); break;
+                    MazeSolver_BFS.CallSolver_BFS(); break;
 
                 case 2:
+                    MazeSolver_DeadEndFilling.CallSolver_DeadEndFilling(); break; 
+
+                case 3: 
+                    MazeSolver_RightWind.CallSolver_RightWind(); break;
+                    
+                case 4: 
                     MazeSolver_Random.CallSolver_Random(); break;
 
                 default: return;
             }
+        }
+
+        private void GUI_solverSelect_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            if (GUI_solverSelect.SelectedIndex != 2 || GUI_easyMazeToggle.IsChecked == false) {
+                GUI_outPut.Text = "";
+                return;
+            }
+
+            GUI_outPut.Text = @"DeadEndFilling doesnt properly work if EasyMaze is on. The generator makes a 'inperfect maze' (not only 1 linear way to the finish) when checked and DeadEndFilling is made for 'perfect mazes'.";
         }
 
         private void GUI_animationToggle_Clicked(object sender, RoutedEventArgs e) {
@@ -95,5 +121,6 @@ namespace MazeSolverVisualizer {
             else if (GUI_animationSleep.Text.Length == 0)
                 animationTaskDelayIn = 0;
         }
+
     }
 }

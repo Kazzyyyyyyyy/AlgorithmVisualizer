@@ -137,7 +137,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        
 
         <Style TargetType="Button">
             <Setter Property="Background" Value="#2D2D30"/>
@@ -170,7 +169,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        
+
         <Style TargetType="TextBox" >
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="Background" Value="#2D2D30"/>
@@ -197,6 +196,63 @@
                     <Setter Property="Opacity" Value="0.6"/>
                 </Trigger>
             </Style.Triggers>
+        </Style>
+
+
+        <Style TargetType="CheckBox">
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Background" Value="#2D2D30" />
+            <Setter Property="BorderBrush" Value="#FF686868" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="2" />
+            <Setter Property="FontSize" Value="14" />
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <Grid Background="Transparent">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Border x:Name="CheckBorder"
+                                    Width="18"
+                                    Height="18"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="3">
+                                <Path x:Name="CheckMark"
+                                      Data="M 0 5 L 5 10 L 12 0"
+                                      Stroke="White"
+                                      StrokeThickness="2"
+                                      Visibility="Collapsed" 
+                                      HorizontalAlignment="Center" 
+                                      VerticalAlignment="Center" />
+                            </Border>
+
+                            <ContentPresenter Grid.Column="1"
+                                            Margin="5,0,0,0"
+                                            VerticalAlignment="Center"
+                                            Content="{TemplateBinding Content}"
+                                            TextBlock.Foreground="{TemplateBinding Foreground}" />
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="CheckMark" Property="Visibility" Value="Visible" />
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="CheckBorder" Property="BorderBrush" Value="#2D2D30" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="CheckBorder" Property="Opacity" Value="0.6" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
 
         <Style TargetType="TextBlock">

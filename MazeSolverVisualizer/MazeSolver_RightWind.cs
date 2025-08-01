@@ -14,24 +14,18 @@ namespace MazeSolverVisualizer {
         
         async void Loop() {
 
-            //start prepare
-            moveHistory.Add((botY, botX));
-            visUpdateCords.Add((botY, botX));
-            maze[botY, botX] = solvPrint;
-
-
             while (RunLoop_Solver()) {
                 MoveDirections? currDir = GetMoveDirection();
 
-                if (currDir == null) {
+                while (currDir == null) {
                     _utils.Backtrack();
-                    continue;
+                    currDir = GetMoveDirection();
                 }
 
-                MoveBot(currDir);
-
                 moveHistory.Add((botY, botX));
-                maze[botY, botX] = solvPrint;
+
+                MoveBot(currDir);
+                maze[botY, botX] = solverPrint;
 
                 if (playSolveAnimation) {
                     visUpdateCords.Add((botY, botX));
@@ -47,25 +41,25 @@ namespace MazeSolverVisualizer {
             ResetAllVars();
         }
 
+
         //deep logic
         MoveDirections? GetMoveDirection() {
             validDir = Enum.GetValues(typeof(MoveDirections)).Cast<MoveDirections>().ToList();
 
             //wall check 
-            if (botX != 0 && (maze[botY, botX - 1] == 'X' || maze[botY, botX - 1] == solvPrint))
+            if (botX != 0 && (maze[botY, botX - 1] == wallPrint || maze[botY, botX - 1] == solverPrint))
                 validDir.Remove(MoveDirections.Left);
 
-            if (botX != mazeSize - 1 && (maze[botY, botX + 1] == 'X' || maze[botY, botX + 1] == solvPrint))
+            if (botX != mazeSize - 1 && (maze[botY, botX + 1] == wallPrint || maze[botY, botX + 1] == solverPrint))
                 validDir.Remove(MoveDirections.Right);
 
-            if (botY != 0 && (maze[botY - 1, botX] == 'X' || maze[botY - 1, botX] == solvPrint))
+            if (botY != 0 && (maze[botY - 1, botX] == wallPrint || maze[botY - 1, botX] == solverPrint))
                 validDir.Remove(MoveDirections.Up);
 
-            if (botY != mazeSize - 1 && (maze[botY + 1, botX] == 'X' || maze[botY + 1, botX] == solvPrint))
+            if (botY != mazeSize - 1 && (maze[botY + 1, botX] == wallPrint || maze[botY + 1, botX] == solverPrint))
                 validDir.Remove(MoveDirections.Down);
 
 
-            //final decision or backtrack 
             if (validDir.Contains(MoveDirections.Right)) 
                 return MoveDirections.Right;
             
