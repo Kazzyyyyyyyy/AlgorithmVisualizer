@@ -3,33 +3,30 @@ using System.Windows.Media;
 
 using static MazeSolverVisualizer.Utils;
 using static MazeSolverVisualizer.Data;
-using static MazeSolverVisualizer.MainWindow;
 
 
 namespace MazeSolverVisualizer {
     public class MazeSolver_Random {
 
         //main 
-        public static void CallSolver_Random() => _random.Loop();
+        public static async Task CallSolver_Random() => await _random.Loop();
 
-        async void Loop() {
-            
+        async Task Loop() {
+
             while (RunLoop_Solver()) {
                 MoveBot(GetMoveDirection());
 
-                visUpdateCords.Add((botY, botX));
                 maze[botY, botX] = solverPrint;
 
-                if (playSolveAnimation)
+                if (playSolveAnimation) {
+                    visUpdateCords.Add((botY, botX));
                     await _utils.EasyVisUpdateListManager(visUpdateCords, Colors.Green);
+                }
             }
 
             if (!playSolveAnimation)
                 _utils.CreateOrUpdateVisualizer();
 
-            _utils.ReturnToCleanMaze();
-
-            ResetAllVars();
         }
 
         //deep logic

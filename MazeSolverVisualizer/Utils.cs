@@ -1,11 +1,10 @@
-﻿using System.IO;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 using static MazeSolverVisualizer.Data;
 using static MazeSolverVisualizer.MainWindow;
-
+using System.Windows.Controls;
 
 namespace MazeSolverVisualizer {
     public class Utils {
@@ -19,7 +18,13 @@ namespace MazeSolverVisualizer {
             moveHistory.Clear();
             visUpdateCords.Clear();
             cellsBlockedThisRound = -1;
-            cellsMoved = 0;
+            timer.Reset();
+
+            openList.Clear();
+            closedSet.Clear();
+            openSet.Clear();
+            queue.Clear();
+            current = null!;
 
             _utils.BlockControlsWhileRunning();
         }
@@ -53,6 +58,63 @@ namespace MazeSolverVisualizer {
         }
 
 
+        //maze generator
+        public static bool RunLoop_Generator() {
+            if (botY == finishY && botX == finishX - 1) {
+                endReached = true;
+            }
+
+            if (endReached && moveHistory.Count == 0)
+                return false;
+
+            return true;
+        }
+
+        //solver
+        public static bool RunLoop_DeadEndFill() {
+            if (cellsBlockedThisRound == 0)
+                return false; 
+
+            return true;
+        } 
+
+        public static bool RunLoop_Solver() {
+            if (maze[finishY, finishX] == solverPrint)
+                return false;
+
+            return true;
+        }
+
+        public void EraseExcessSolverPrints(List<(int, int)> list) {
+            for (int y = 0; y < mazeSize; y++) {
+                for (int x = 0; x < mazeSize; x++) {
+                    if (maze[y, x] == solverPrint && !list.Contains((y, x))) {
+                        maze[y, x] = freeCellPrint;
+                    }
+                }
+            }
+        }
+
+        public async Task BacktrackBestPath_moveHistory(List<(int y, int x)> moveHistory) {
+
+            visUpdateCords.Add(moveHistory.Last());
+            moveHistory.RemoveAt(moveHistory.Count - 1);
+
+            for (int i = moveHistory.Count - 1; i >= 0; i--) {
+                if (moveHistory[i].y == visUpdateCords.Last().y && (moveHistory[i].x == visUpdateCords.Last().x - 1 || moveHistory[i].x == visUpdateCords.Last().x + 1)
+                    || moveHistory[i].x == visUpdateCords.Last().x && (moveHistory[i].y == visUpdateCords.Last().y - 1 || moveHistory[i].y == visUpdateCords.Last().y + 1)) {
+                    visUpdateCords.Add(moveHistory[i]);
+                }
+            }
+
+            if (!playSolveAnimation)
+                EraseExcessSolverPrints(visUpdateCords);
+
+            _mainWindow.GUI_outPut.Text += visUpdateCords.Count.ToString();
+            await _utils.SyncVisualizer(visUpdateCords, Colors.Red);
+        }
+
+
         //Maze array management
         public void GenMazeArray() {
             for (int height = 0; height < mazeSize; height++) {
@@ -78,69 +140,20 @@ namespace MazeSolverVisualizer {
         }
 
 
-        //maze generator
-        public static bool RunLoop_Generator() {
-            if (botY == mazeSize - 2 && botX == mazeSize - 2) {
-                endReached = true;
-            }
-
-            if (endReached && moveHistory.Count == 0)
-                return false;
-
-            return true;
-        }
-
-
-        //solver
-        public static bool RunLoop_BFS() {
-            if (moveHistory.Last().y == mazeSize - 2 && moveHistory.Last().x == mazeSize - 1)
-                return false;
-
-            return true;
-        } 
-        
-        public static bool RunLoop_DeadEndFill() {
-            if (cellsBlockedThisRound == 0)
-                return false; 
-
-            return true;
-        } 
-
-        public static bool RunLoop_Solver() {
-            if (botY == mazeSize - 2 && botX == mazeSize - 1)
-                return false;
-
-            return true;
-        }
-
-        public async Task BacktrackBestPath_moveHistory(List<(int y, int x)> moveHistory) {
-
-            visUpdateCords.Add(moveHistory.Last());
-            moveHistory.RemoveAt(moveHistory.Count - 1);
-
-            for (int i = moveHistory.Count - 1; i >= 0; i--) {
-                if (moveHistory[i].y == visUpdateCords.Last().y && (moveHistory[i].x == visUpdateCords.Last().x - 1 || moveHistory[i].x == visUpdateCords.Last().x + 1)
-                    || moveHistory[i].x == visUpdateCords.Last().x && (moveHistory[i].y == visUpdateCords.Last().y - 1 || moveHistory[i].y == visUpdateCords.Last().y + 1)) {
-                    visUpdateCords.Add(moveHistory[i]);
-                }
-            }
-
-            if (!playSolveAnimation) {
-                for (int y = 0; y < mazeSize; y++) {
-                    for (int x = 0; x < mazeSize; x++) {
-                        if (maze[y, x] == solverPrint && !visUpdateCords.Contains((y, x))) {
-                            maze[y, x] = freeCellPrint;
-                        }
-                    }
-                }
-                return;
-            }
-
-            await _utils.SyncVisualizer(visUpdateCords, Colors.Red);
-        }
-
-
         //GUI 
+        public void OutPutAfterSolve() {
+            timer.Stop();
+            int steps = 0;
+            foreach (char c in maze) {
+                if (c == solverPrint)
+                    steps++;
+            }
+
+            _mainWindow.GUI_outPut.Text = $"{timer.ElapsedMilliseconds}ms\n{steps} steps";
+
+            timer.Reset();
+        }
+
         public void BlockControlsWhileRunning() {
             foreach(UIElement el in _mainWindow.GUI_controlls.Children) {
                 if (el == _mainWindow.GUI_animationSleep)

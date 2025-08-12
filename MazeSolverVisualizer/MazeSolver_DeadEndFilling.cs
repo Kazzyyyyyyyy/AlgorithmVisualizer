@@ -1,18 +1,16 @@
-﻿using static MazeSolverVisualizer.Utils; 
+﻿using System.Windows.Media;
+
+using static MazeSolverVisualizer.Utils; 
 using static MazeSolverVisualizer.Data;
-using System.IO;
-using System.Windows.Media;
-using System.Diagnostics;
-using System.Windows.Shell;
+
 
 namespace MazeSolverVisualizer {
     public class MazeSolver_DeadEndFilling {
 
         //main
-        public static void CallSolver_DeadEndFilling() => _deadEndFill.Loop();
+        public static async Task CallSolver_DeadEndFilling() => await _deadEndFill.Loop();
 
-        async void Loop() {
-
+        async Task Loop() {
             while (RunLoop_DeadEndFill()) {
                 SolveLogic();
 
@@ -25,15 +23,12 @@ namespace MazeSolverVisualizer {
             if (!playSolveAnimation)
                 _utils.CreateOrUpdateVisualizer();
 
-            _utils.ReturnToCleanMaze();
-
-            ResetAllVars();
         }
 
 
         //deep logic
         async Task BacktrackBestPath_DeadEndFill() {
-            visUpdateCords.Add((1, 0));
+            visUpdateCords.Add((startY, startX));
             
             for (botY = 1; botY <= mazeSize - 2; botY++) {
                 for (botX = 1; botX <= mazeSize - 2; botX++) {
@@ -57,16 +52,16 @@ namespace MazeSolverVisualizer {
 
                     int validDirNum = 4;
 
-                    if (maze[botY - 1, botX] == solverPrint || maze[botY - 1, botX] == wallPrint)
+                    if (maze[botY - 1, botX] != freeCellPrint)
                         validDirNum--;
 
-                    if (maze[botY + 1, botX] == solverPrint || maze[botY + 1, botX] == wallPrint)
+                    if (maze[botY + 1, botX] != freeCellPrint)
                         validDirNum--;
 
-                    if (maze[botY, botX - 1] == solverPrint || maze[botY, botX - 1] == wallPrint)
+                    if (maze[botY, botX - 1] != freeCellPrint)
                         validDirNum--;
 
-                    if (maze[botY, botX + 1] == solverPrint || maze[botY, botX + 1] == wallPrint)
+                    if (maze[botY, botX + 1] != freeCellPrint)
                         validDirNum--;
 
                     if(validDirNum == 1) {

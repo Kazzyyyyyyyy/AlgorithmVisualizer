@@ -3,6 +3,7 @@
 using static MazeSolverVisualizer.Data;
 using static MazeSolverVisualizer.Utils;
 using static MazeSolverVisualizer.MainWindow;
+using Accessibility;
 
 
 namespace MazeSolverVisualizer {
@@ -15,6 +16,9 @@ namespace MazeSolverVisualizer {
             if (int.TryParse(_mainWindow.GUI_mazeSize.Text, out int parse) && parse != mazeSize) {
                 mazeSize = parse;
                 maze = new char[mazeSize, mazeSize];
+
+                finishY = mazeSize - 2; 
+                finishX = mazeSize - 1;
             }
             else 
                 _mainWindow.GUI_mazeSize.Text = mazeSize.ToString();
@@ -65,7 +69,7 @@ namespace MazeSolverVisualizer {
                 await _utils.EasyVisUpdateListManager(visUpdateCords, backgroundCol);
             else
                 _utils.CreateOrUpdateVisualizer();
-            
+
             ResetAllVars();
         }
 

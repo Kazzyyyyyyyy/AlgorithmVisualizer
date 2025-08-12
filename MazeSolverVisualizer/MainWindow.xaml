@@ -3,11 +3,22 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MazeSolverVisualizer"
+        xmlns:s="clr-namespace:System;assembly=System.Runtime"
+        xmlns:msvd="clr-namespace:MazeSolverVisualizer"
         mc:Ignorable="d"
         Title="Algo visualizer" WindowState="Maximized" Height="1080" Width="1920"
-        Background="#3C3C3C"
-        >
+        Background="#3C3C3C" >
+
+    <!--SolverAlgorithm combobox enum parse-->
+    <Window.Resources>
+        <ObjectDataProvider x:Key="SolverAlgorithmsData" 
+                    MethodName="GetValues" 
+                    ObjectType="{x:Type s:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="msvd:SolverAlgorithms" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Window.Resources>
 
     <Grid >
         <Grid.ColumnDefinitions>
@@ -15,11 +26,11 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        
-        <!--Testing-->
+
+        <!--output-->
         <TextBlock x:Name="GUI_outPut" TextWrapping="Wrap" Grid.Column="1" Margin="5, 300" FontSize="15" />
 
-        
+
         <!--Controlls:-->
         <Grid x:Name="GUI_controlls" Grid.Column="1">
 
@@ -49,29 +60,31 @@
             <Button x:Name="GUI_solve" Click="GUI_solve_Click" Content="Solve Maze" 
                     VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,97,0,0" Height="25" />
 
-            <ComboBox Name="GUI_solverSelect" 
-                      VerticalAlignment="Top" HorizontalAlignment="Left" Height="25" Margin="80,96,0,0" Width="105" 
-                      SelectionChanged="GUI_solverSelect_SelectionChanged">
-                <ComboBoxItem Content="A*" />
-                <ComboBoxItem Content="BFS" />
-                <ComboBoxItem Content="DeadEndFill" />
-                <ComboBoxItem Content="RightWinder" />
-                <ComboBoxItem Content="Random" />
-            </ComboBox>
+            <ComboBox Name="GUI_solverSelect"
+                  VerticalAlignment="Top" HorizontalAlignment="Left" Height="25"
+                  Margin="80,96,0,0" Width="105"
+                  ItemsSource="{Binding Source={StaticResource SolverAlgorithmsData}}"
+                  SelectionChanged="GUI_solverSelect_SelectionChanged" />
 
+            <!--A*-->
+            <TextBox x:Name="GUI_AStarGreed"
+                     VerticalAlignment="Top" HorizontalAlignment="Left" Width="50" Margin="194,104,0,0" />
+
+            <TextBlock Text="A* greed (accuracy &lt; speed)" Name="GUI_AStarGreedText"
+                       VerticalAlignment="Top" HorizontalAlignment="Left" Margin="194,127,0,0" Width="68" TextWrapping="Wrap" />
 
             <!--Animation-->
             <CheckBox x:Name="GUI_animationToggle" Content="Algorithm Animation" Click="GUI_animationToggle_Clicked" 
                       VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5, 147" IsChecked="True" />
 
-            <TextBox x:Name="GUI_animationSleep" TextChanged="GUI_animationSleep_TextChanged"
+            <TextBox x:Name="GUI_animationSleep"
                      VerticalAlignment="Top" HorizontalAlignment="Left" Width="50" Margin="5, 167" />
 
-            <TextBlock x:Name="GUI_animationSleepText" Text=":Animation Speed"
+            <TextBlock Text=":Animation Speed" Name="GUI_animationSleepText"
                        VerticalAlignment="Top" HorizontalAlignment="Left" Margin="60, 167" />
         </Grid>
-        
-        
+
+
         <!--VISUALIZER-->
         <ScrollViewer x:Name="GUI_scrollbar" 
                       HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" >

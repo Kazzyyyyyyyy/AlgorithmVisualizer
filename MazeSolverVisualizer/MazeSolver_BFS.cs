@@ -1,62 +1,60 @@
-﻿using System.Windows;
-using System.Windows.Media;
+﻿using System.Windows.Media;
 
 using static MazeSolverVisualizer.Data;
 using static MazeSolverVisualizer.Utils;
-using static MazeSolverVisualizer.MainWindow;
-
 
 namespace MazeSolverVisualizer {
     public class MazeSolver_BFS {
 
         //main 
-        public static void CallSolver_BFS() => _bfs.Loop();
+        public static async Task CallSolver_BFS() => await _bfs.Loop();
 
-        async void Loop() {
+        async Task Loop() {
 
-            while (RunLoop_BFS()) {
+            queue.Enqueue(new Node(startY, startX));
+
+            while (RunLoop_Solver()) {
                 SolveLogic();
 
-                if (playSolveAnimation)
+                if (playSolveAnimation) {
+                    visUpdateCords.Add((current.Y, current.X));
                     await _utils.EasyVisUpdateListManager(visUpdateCords, Colors.Green);
+                }
             }
 
-            await _utils.BacktrackBestPath_moveHistory(moveHistory);
+            while (current != null) {
+                visUpdateCords.Add((current.Y, current.X));
+                current = current.Parent;
+            }
 
-            if (!playSolveAnimation)
+            if (playSolveAnimation)
+                await _utils.SyncVisualizer(visUpdateCords, Colors.Red);
+            else {
+                _utils.EraseExcessSolverPrints(visUpdateCords);
                 _utils.CreateOrUpdateVisualizer();
-
-            _utils.ReturnToCleanMaze();
-
-            ResetAllVars();
+            }
         }
 
 
         //deep logic
         void SolveLogic() {
-            for (botY = 1; botY <= mazeSize - 2; botY++) {
-                for (botX = 1; botX <= mazeSize - 1; botX++) {
 
-                    if (maze[botY, botX] == freeCellPrint && ConnectsToPathAndIsVallid(botY, botX)) {
-                        maze[botY, botX] = solverPrint;
-                        moveHistory.Add((botY, botX));
-                        if(playSolveAnimation) visUpdateCords.Add((botY, botX));
-                        continue;
-                    }
-                }
+            current = queue.Dequeue();
+
+            maze[current.Y, current.X] = solverPrint;
+
+            foreach (var (ny, nx) in new (int, int)[] {
+                    (current.Y - 1, current.X),
+                    (current.Y + 1, current.X),
+                    (current.Y, current.X - 1),
+                    (current.Y, current.X + 1) }) {
+
+                if (nx < 0 || nx >= mazeSize || closedSet.Contains((ny, nx)) || maze[ny, nx] != freeCellPrint)
+                    continue;
+
+                queue.Enqueue(new Node(ny, nx, parent: current));
+                closedSet.Add((ny, nx));
             }
-        }
-
-        bool ConnectsToPathAndIsVallid(int y, int x) {
-            if (x != 0 && maze[y, x - 1] == solverPrint
-                || x != mazeSize - 1 && maze[y, x + 1] == solverPrint
-                || y != 0 && maze[y - 1, x] == solverPrint
-                || y != mazeSize - 1 && maze[y + 1, x] == solverPrint) {
-
-                return true;
-            }
-
-            return false;
         }
     }
 }

@@ -2,103 +2,89 @@
 using static MazeSolverVisualizer.Data;
 using static MazeSolverVisualizer.Utils;
 using static MazeSolverVisualizer.MainWindow;
-using System.Windows.Navigation;
-using System.Windows.Controls.Primitives;
-using System.Windows.Media.Animation;
+
 
 namespace MazeSolverVisualizer {
     public class MazeSolver_A_Star {
 
         //main
-        public static void CallSolver_A_Star() => _a_Star.Loop();
+        public static async Task CallSolver_A_Star() {
 
-        async void Loop() {
+            if (int.TryParse(_mainWindow.GUI_AStarGreed.Text, out int parse))
+                aStarGreed = parse == 0 ? 1 : parse;
+            else
+                _mainWindow.GUI_animationSleep.Text = aStarGreed.ToString();
+
+            await _a_Star.Loop();
+        }
+
+        async Task Loop() {
+
+            //start node
+            var startNode = new Node(startY, startX, 0, Heuristic(startY, startX));
+            openList.Enqueue(startNode, startNode.F);
 
             while (RunLoop_Solver()) {
-
-                MoveDirections? currDir = GetMoveDirection();
-
-                while (currDir == null) {
-                    _utils.Backtrack();
-                    cellsMoved--;
-                    currDir = GetMoveDirection();
-                }
-
-                moveHistory.Add((botY, botX)); 
-                
-                MoveBot(currDir);
-                maze[botY, botX] = solverPrint;
-                cellsMoved++; 
+                SolveLogic();
 
                 if (playSolveAnimation) {
-                    visUpdateCords.Add((botY, botX));
+                    visUpdateCords.Add((current.Y, current.X));
                     await _utils.EasyVisUpdateListManager(visUpdateCords, Colors.Green);
                 }
             }
 
-            moveHistory.Add((botY, botX));
-            await _utils.BacktrackBestPath_moveHistory(moveHistory);
+            //backtrack best path
+            while (current != null) {
+                visUpdateCords.Add((current.Y, current.X));
+                current = current.Parent;
+            }
 
-            if (!playSolveAnimation)
+            if (playSolveAnimation)
+                await _utils.SyncVisualizer(visUpdateCords, Colors.Red);
+            else {
+                _utils.EraseExcessSolverPrints(visUpdateCords);
                 _utils.CreateOrUpdateVisualizer();
-
-            _utils.ReturnToCleanMaze();
-            ResetAllVars();
+            }
         }
 
 
         //deep logic
-        MoveDirections? GetMoveDirection() {
+        void SolveLogic() {
 
-            foreach (var dir in Enum.GetValues(typeof(MoveDirections)).Cast<MoveDirections>().ToList()) {
-                switch (dir) {
-                    case MoveDirections.Left:
-                        if (botX <= 1 || maze[botY, botX - 1] != freeCellPrint)
-                            break;
+            current = openList.Dequeue();
+            openSet.Remove((current.Y, current.X));
+            closedSet.Add((current.Y, current.X));
 
-                        moveValues.Add((MoveDirections.Left, CalculateCellValue(botY, botX - 1)));
-                        break;
+            maze[current.Y, current.X] = solverPrint;
 
-                    case MoveDirections.Right:
-                        if (botX == mazeSize - 1 || maze[botY, botX + 1] != freeCellPrint)
-                            break;
+            foreach (var dir in new (int y, int x)[] { new(-1, 0), new(1, 0), new(0, -1), new(0, 1) }) {
+                int ny = current.Y + dir.y;
+                int nx = current.X + dir.x;
 
-                        moveValues.Add((MoveDirections.Right, CalculateCellValue(botY, botX + 1)));
-                        break;
+                if (ny < 0 || ny >= mazeSize || nx < 0 || nx >= mazeSize || closedSet.Contains((ny, nx)) ||
+                    maze[ny, nx] != freeCellPrint)
+                    continue;
 
-                    case MoveDirections.Up:
-                        if (botY <= 1 || maze[botY - 1, botX] != freeCellPrint)
-                            break;
+                int h = Heuristic(ny, nx), 
+                    tentativeG = current.G + 1;
 
-                        moveValues.Add((MoveDirections.Up, CalculateCellValue(botY - 1, botX)));
-                        break;
-
-                    case MoveDirections.Down:
-                        if (botY >= mazeSize - 2 || maze[botY + 1, botX] != freeCellPrint)
-                            break;
-
-                        moveValues.Add((MoveDirections.Down, CalculateCellValue(botY - 1, botX)));
-                        break;
+                if (openSet.TryGetValue((ny, nx), out Node? existing)) {
+                    if (tentativeG < existing.G) {
+                        existing.G = tentativeG;
+                        existing.Parent = current;
+                        openList.Enqueue(existing, existing.F);
+                    }
+                }
+                else {
+                    var neighbor = new Node(ny, nx, tentativeG, h, current);
+                    openList.Enqueue(neighbor, neighbor.F);
+                    openSet[(ny, nx)] = neighbor;
                 }
             }
-
-            MoveDirections? bestDir = moveValues.Count == 0 ? null : moveValues[0].Item1;
-            long? bestValue = moveValues.Count == 0 ? null : moveValues[0].Item2;
-
-            foreach(var (dir, val) in moveValues) {
-                if(val <= bestValue) {
-                    bestValue = val;
-                    bestDir = dir;
-                }
-            }
-
-            moveValues.Clear();
-
-            return bestDir;
         }
 
-        long CalculateCellValue(int y, int x) {
-            return cellsMoved + ((mazeSize - 2) - y + (mazeSize - 1) - x);
-        } 
+        int Heuristic(int y, int x) {
+            return aStarGreed * (Math.Abs(y - finishY) + Math.Abs(x - finishX));
+        }
     }
 }

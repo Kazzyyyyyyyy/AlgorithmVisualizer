@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 using static MazeSolverVisualizer.Data;
+using static MazeSolverVisualizer.Utils;
 
 
 namespace MazeSolverVisualizer {
@@ -31,12 +31,16 @@ namespace MazeSolverVisualizer {
             GUI_cellSize.Text = cellSize.ToString();
 
             GUI_mazeSize.Text = mazeSize.ToString();
-            
-            GUI_solverSelect.SelectedIndex = 0;
+
+            GUI_easyMazeToggle.IsChecked = easyMaze ? true : false;
+
+            GUI_AStarGreed.Text = aStarGreed.ToString();
+
+            GUI_solverSelect.SelectedItem = SolverAlgorithms.AStar;
         }
 
 
-        //Controll events
+        //Control events
         private void GUI_generateMaze_Click(object sender, RoutedEventArgs e) {
             _utils.BlockControlsWhileRunning();
 
@@ -45,8 +49,8 @@ namespace MazeSolverVisualizer {
 
         private void GUI_resetMaze_Click(object sender, RoutedEventArgs e) 
             => _utils.CleanVisualizer();
-        
-        private void GUI_solve_Click(object sender, RoutedEventArgs e) {
+
+        private async void GUI_solve_Click(object sender, RoutedEventArgs e) {
             _utils.BlockControlsWhileRunning();
 
             //GUI parse
@@ -54,50 +58,66 @@ namespace MazeSolverVisualizer {
                 animationTaskDelayIn = parse;
             else
                 _mainWindow.GUI_animationSleep.Text = animationTaskDelayIn.ToString();
-            
 
-            if(updateForCleanMazeVisual.Count > 0)
+            if (updateForCleanMazeVisual.Count > 0) {
+                _utils.ReturnToCleanMaze();
                 _utils.CleanVisualizer();
+            }
 
             //algorithm start 
-            if (GUI_solverSelect.SelectedIndex != 2) { //dont do when call DeadEndFilling 
+            if ((SolverAlgorithms)GUI_solverSelect.SelectedItem != SolverAlgorithms.DeadEndFilling) { //dont do when call DeadEndFilling 
                 maze[botY, botX] = solverPrint;
                 moveHistory.Add((botY, botX));
                 if (playSolveAnimation)
                     visUpdateCords.Add((botY, botX));
             }
 
-            switch (GUI_solverSelect.SelectedIndex) {
-                case 0:
-                    MazeSolver_A_Star.CallSolver_A_Star(); break; 
+            timer.Start(); 
 
-                case 1: 
-                    MazeSolver_BFS.CallSolver_BFS(); break;
+            switch (GUI_solverSelect.SelectedItem) {
+                case SolverAlgorithms.AStar:
+                    await MazeSolver_A_Star.CallSolver_A_Star(); break;
 
-                case 2:
-                    MazeSolver_DeadEndFilling.CallSolver_DeadEndFilling(); break; 
+                case SolverAlgorithms.BFS:
+                    await MazeSolver_BFS.CallSolver_BFS(); break;
 
-                case 3: 
-                    MazeSolver_RightWind.CallSolver_RightWind(); break;
-                    
-                case 4: 
-                    MazeSolver_Random.CallSolver_Random(); break;
+                case SolverAlgorithms.DeadEndFilling:
+                    await MazeSolver_DeadEndFilling.CallSolver_DeadEndFilling(); break;
+
+                case SolverAlgorithms.RightHand:
+                    await MazeSolver_RightOrLeftWind.CallSolver_RightOrLeftWind(MoveDirections.Right); break;
+
+                case SolverAlgorithms.LeftHand:
+                    await MazeSolver_RightOrLeftWind.CallSolver_RightOrLeftWind(MoveDirections.Left); break;
+
+                case SolverAlgorithms.Random:
+                    await MazeSolver_Random.CallSolver_Random(); break;
 
                 default: return;
             }
+
+            _utils.OutPutAfterSolve();
+            
+            ResetAllVars();
         }
 
         private void GUI_solverSelect_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            if (GUI_solverSelect.SelectedIndex != 2 || GUI_easyMazeToggle.IsChecked == false) {
-                GUI_outPut.Text = "";
+            if ((SolverAlgorithms)GUI_solverSelect.SelectedItem == SolverAlgorithms.DeadEndFilling && GUI_easyMazeToggle.IsChecked == true) {
+                GUI_outPut.Text = @"DeadEndFilling doesnt properly work if EasyMaze is on. The generator makes a 'inperfect maze' (not only 1 linear way to the finish) when checked and DeadEndFilling is made for 'perfect mazes'.";
+                return;
+            }
+            else if ((SolverAlgorithms)GUI_solverSelect.SelectedItem == SolverAlgorithms.AStar) {
+                GUI_AStarGreed.Visibility = Visibility.Visible;
+                GUI_AStarGreedText.Visibility = Visibility.Visible;
                 return;
             }
 
-            GUI_outPut.Text = @"DeadEndFilling doesnt properly work if EasyMaze is on. The generator makes a 'inperfect maze' (not only 1 linear way to the finish) when checked and DeadEndFilling is made for 'perfect mazes'.";
+            GUI_outPut.Text = "";
+            GUI_AStarGreed.Visibility = Visibility.Collapsed;
+            GUI_AStarGreedText.Visibility = Visibility.Collapsed;
         }
 
         private void GUI_animationToggle_Clicked(object sender, RoutedEventArgs e) {
-
             if(GUI_animationToggle.IsChecked == true) {
                 GUI_animationSleep.Visibility = Visibility.Visible;
                 GUI_animationSleepText.Visibility = Visibility.Visible;
@@ -113,14 +133,5 @@ namespace MazeSolverVisualizer {
 
         private void GUI_easyMazeToggle_Click(object sender, RoutedEventArgs e)
             => easyMaze = GUI_easyMazeToggle.IsChecked == true ? true : false;
-
-        private void GUI_animationSleep_TextChanged(object sender, TextChangedEventArgs e) {
-            if (int.TryParse(GUI_animationSleep.Text, out int parsed))
-                animationTaskDelayIn = parsed;
-
-            else if (GUI_animationSleep.Text.Length == 0)
-                animationTaskDelayIn = 0;
-        }
-
     }
 }
