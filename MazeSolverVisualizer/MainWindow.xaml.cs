@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using static MazeSolverVisualizer.Data;
+using static MazeSolverVisualizer.DataGlobal;
 using static MazeSolverVisualizer.Utils;
 
 
@@ -14,99 +14,113 @@ namespace MazeSolverVisualizer {
         public MainWindow() {
             InitializeComponent();
             _mainWindow = this;
-            Init();
+            GUIInit();
 
-            _utils.BlockControlsWhileRunning();
 
-            playSolveAnimation = false; 
-            MazeGenerator.CallGenerator();
-            playSolveAnimation = true;
+            ///programm start
+            GUI_solverSelector.SelectedItem = SolverAlgorithms.AStar;
+            GUI_button_Click(GUI_generateMaze, null!);
+            playAlgorithmAnimation = true; 
         }
 
-        void Init() {
-            GUI_visualizer.Width = mazeSize * cellSize;
-            GUI_visualizer.Height = mazeSize * cellSize;
+        void GUIInit() {
+            
+            //visualizer
+            GUI_visualizer.Width = mazeSize * DataVisualizer.cellSize;
+            GUI_visualizer.Height = mazeSize * DataVisualizer.cellSize;
 
-            GUI_animationSleep.Text = animationTaskDelayIn.ToString();
-            GUI_cellSize.Text = cellSize.ToString();
+            //controls
+            GUI_animationSpeed.Text = DataVisualizer.animationSpeed.ToString();
+            GUI_visualizerCellSize.Text = DataVisualizer.cellSize.ToString();
 
             GUI_mazeSize.Text = mazeSize.ToString();
 
-            GUI_easyMazeToggle.IsChecked = easyMaze ? true : false;
+            GUI_imperfectMazeToggle.IsChecked = DataGenerator.imperfectMaze ? true : false;
 
-            GUI_AStarGreed.Text = aStarGreed.ToString();
-
-            GUI_solverSelect.SelectedItem = SolverAlgorithms.AStar;
+            GUI_AStarGreed.Text = DataAStar.aStarGreed.ToString();
         }
 
 
         //Control events
-        private void GUI_generateMaze_Click(object sender, RoutedEventArgs e) {
-            _utils.BlockControlsWhileRunning();
-
-            MazeGenerator.CallGenerator();
+        private void GUI_resetMaze_Click(object sender, RoutedEventArgs e) {
+            _utils.CleanupMazeArray();
+            _visl.CreateOrUpdateVisualizer();
         }
 
-        private void GUI_resetMaze_Click(object sender, RoutedEventArgs e) 
-            => _utils.CleanVisualizer();
+        private async void GUI_button_Click(object sender, RoutedEventArgs e) {
 
-        private async void GUI_solve_Click(object sender, RoutedEventArgs e) {
-            _utils.BlockControlsWhileRunning();
-
-            //GUI parse
-            if (int.TryParse(_mainWindow.GUI_animationSleep.Text, out int parse))
-                animationTaskDelayIn = parse;
+            //animation speed parse
+            if (int.TryParse(_mainWindow.GUI_animationSpeed.Text, out int parsedSpeed))
+                DataVisualizer.animationSpeed = parsedSpeed;
             else
-                _mainWindow.GUI_animationSleep.Text = animationTaskDelayIn.ToString();
-
-            if (updateForCleanMazeVisual.Count > 0) {
-                _utils.ReturnToCleanMaze();
-                _utils.CleanVisualizer();
-            }
-
-            //algorithm start 
-            if ((SolverAlgorithms)GUI_solverSelect.SelectedItem != SolverAlgorithms.DeadEndFilling) { //dont do when call DeadEndFilling 
-                maze[botY, botX] = solverPrint;
-                moveHistory.Add((botY, botX));
-                if (playSolveAnimation)
-                    visUpdateCords.Add((botY, botX));
-            }
+                _mainWindow.GUI_animationSpeed.Text = DataVisualizer.animationSpeed.ToString();
 
             timer.Start(); 
 
-            switch (GUI_solverSelect.SelectedItem) {
-                case SolverAlgorithms.AStar:
-                    await MazeSolver_A_Star.CallSolver_A_Star(); break;
-
-                case SolverAlgorithms.BFS:
-                    await MazeSolver_BFS.CallSolver_BFS(); break;
-
-                case SolverAlgorithms.DeadEndFilling:
-                    await MazeSolver_DeadEndFilling.CallSolver_DeadEndFilling(); break;
-
-                case SolverAlgorithms.RightHand:
-                    await MazeSolver_RightOrLeftWind.CallSolver_RightOrLeftWind(MoveDirections.Right); break;
-
-                case SolverAlgorithms.LeftHand:
-                    await MazeSolver_RightOrLeftWind.CallSolver_RightOrLeftWind(MoveDirections.Left); break;
-
-                case SolverAlgorithms.Random:
-                    await MazeSolver_Random.CallSolver_Random(); break;
-
-                default: return;
+            if ((Button)sender == GUI_generateMaze) {
+                await GeneratorManager();
+            }
+            else if ((Button)sender == GUI_solveMaze) {
+                await SolverManager();
             }
 
-            _utils.OutPutAfterSolve();
-            
-            ResetAllVars();
+            OutPutDataAfterRun();
+            ResetGlobalVars();
         }
 
-        private void GUI_solverSelect_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            if ((SolverAlgorithms)GUI_solverSelect.SelectedItem == SolverAlgorithms.DeadEndFilling && GUI_easyMazeToggle.IsChecked == true) {
+        async Task GeneratorManager() {
+
+            //maze size parse
+            if (int.TryParse(_mainWindow.GUI_mazeSize.Text, out int parsedSize) && parsedSize != mazeSize) {
+                mazeSize = parsedSize;
+                maze = new char[mazeSize, mazeSize];
+
+                finishY = mazeSize - 2;
+                finishX = mazeSize - 1;
+            }
+            else
+                _mainWindow.GUI_mazeSize.Text = mazeSize.ToString();
+
+
+            _utils.FillMazeArray();
+
+            if (playAlgorithmAnimation)
+                _visl.CreateOrUpdateVisualizer();
+
+            await MazeGenerator.CallGenerator();
+
+            mazeCurrentlySolved = false; 
+        }
+
+        async Task SolverManager() {
+
+            if (mazeCurrentlySolved) {
+                _utils.CleanupMazeArray();
+
+                if (playAlgorithmAnimation)
+                    _visl.CreateOrUpdateVisualizer();
+            }
+
+            var solver = GUI_solverSelector.SelectedItem switch {
+                SolverAlgorithms.AStar => MazeSolver_A_Star.CallSolver_A_Star(),
+                SolverAlgorithms.BFS => MazeSolver_BFS.CallSolver_BFS(),
+                SolverAlgorithms.DeadEndFilling => MazeSolver_DeadEndFilling.CallSolver_DeadEndFilling(),
+                SolverAlgorithms.RightHand => MazeSolver_RightOrLeftWind.CallSolver_RightOrLeftWind(MoveDirections.Right),
+                SolverAlgorithms.LeftHand => MazeSolver_RightOrLeftWind.CallSolver_RightOrLeftWind(MoveDirections.Left),
+                SolverAlgorithms.Random => MazeSolver_Random.CallSolver_Random(),
+                _ => Task.CompletedTask
+            };
+
+            await solver;
+            mazeCurrentlySolved = true;
+        }
+
+        private void GUI_solverSelector_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            if ((SolverAlgorithms)GUI_solverSelector.SelectedItem == SolverAlgorithms.DeadEndFilling && GUI_imperfectMazeToggle.IsChecked == true) {
                 GUI_outPut.Text = @"DeadEndFilling doesnt properly work if EasyMaze is on. The generator makes a 'inperfect maze' (not only 1 linear way to the finish) when checked and DeadEndFilling is made for 'perfect mazes'.";
                 return;
             }
-            else if ((SolverAlgorithms)GUI_solverSelect.SelectedItem == SolverAlgorithms.AStar) {
+            else if ((SolverAlgorithms)GUI_solverSelector.SelectedItem == SolverAlgorithms.AStar) {
                 GUI_AStarGreed.Visibility = Visibility.Visible;
                 GUI_AStarGreedText.Visibility = Visibility.Visible;
                 return;
@@ -119,19 +133,18 @@ namespace MazeSolverVisualizer {
 
         private void GUI_animationToggle_Clicked(object sender, RoutedEventArgs e) {
             if(GUI_animationToggle.IsChecked == true) {
-                GUI_animationSleep.Visibility = Visibility.Visible;
-                GUI_animationSleepText.Visibility = Visibility.Visible;
-                playSolveAnimation = true; 
-
+                GUI_animationSpeed.Visibility = Visibility.Visible;
+                GUI_animationSpeedText.Visibility = Visibility.Visible;
+                playAlgorithmAnimation = true; 
                 return; 
             }
 
-            GUI_animationSleepText.Visibility = Visibility.Collapsed; 
-            GUI_animationSleep.Visibility = Visibility.Collapsed;
-            playSolveAnimation = false;
+            GUI_animationSpeedText.Visibility = Visibility.Collapsed;
+            GUI_animationSpeed.Visibility = Visibility.Collapsed;
+            playAlgorithmAnimation = false;
         }
 
-        private void GUI_easyMazeToggle_Click(object sender, RoutedEventArgs e)
-            => easyMaze = GUI_easyMazeToggle.IsChecked == true ? true : false;
+        private void GUI_imperfectMazeToggle_Click(object sender, RoutedEventArgs e)
+            => DataGenerator.imperfectMaze = GUI_imperfectMazeToggle.IsChecked == true ? true : false;
     }
 }

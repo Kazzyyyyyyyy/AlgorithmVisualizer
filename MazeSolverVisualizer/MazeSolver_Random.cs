@@ -2,7 +2,8 @@
 using System.Windows.Media;
 
 using static MazeSolverVisualizer.Utils;
-using static MazeSolverVisualizer.Data;
+using static MazeSolverVisualizer.DataGlobal;
+using static MazeSolverVisualizer.DataRandomMove;
 
 
 namespace MazeSolverVisualizer {
@@ -14,19 +15,17 @@ namespace MazeSolverVisualizer {
         async Task Loop() {
 
             while (RunLoop_Solver()) {
-                MoveBot(GetMoveDirection());
+                MoveBot(GetMoveDirection(), ref botY, ref botX);
 
                 maze[botY, botX] = solverPrint;
 
-                if (playSolveAnimation) {
-                    visUpdateCords.Add((botY, botX));
-                    await _utils.EasyVisUpdateListManager(visUpdateCords, Colors.Green);
-                }
+                await _visl.UpdateVisualizerAtCoords((botY, botX), Colors.Green);
             }
 
-            if (!playSolveAnimation)
-                _utils.CreateOrUpdateVisualizer();
+            if (!playAlgorithmAnimation)
+                _visl.CreateOrUpdateVisualizer();
 
+            DataRandomMove.Reset();
         }
 
         //deep logic

@@ -1,7 +1,8 @@
 ﻿using System.Windows.Media;
 
-using static MazeSolverVisualizer.Utils; 
-using static MazeSolverVisualizer.Data;
+using static MazeSolverVisualizer.Utils;
+using static MazeSolverVisualizer.DataGlobal;
+using static MazeSolverVisualizer.DataDeadEndFill;
 
 
 namespace MazeSolverVisualizer {
@@ -14,33 +15,35 @@ namespace MazeSolverVisualizer {
             while (RunLoop_DeadEndFill()) {
                 SolveLogic();
 
-                if (playSolveAnimation)
-                    await _utils.EasyVisUpdateListManager(visUpdateCords, Colors.Green);
+                await _visl.UpdateVisualizerCordsBatch(visualizerUpdateCords, Colors.Green);
             }
 
-            await BacktrackBestPath_DeadEndFill();
+            await GetFinalPath();
 
-            if (!playSolveAnimation)
-                _utils.CreateOrUpdateVisualizer();
+            if (!playAlgorithmAnimation)
+                _visl.CreateOrUpdateVisualizer();
 
+            DataDeadEndFill.Reset();
         }
 
 
         //deep logic
-        async Task BacktrackBestPath_DeadEndFill() {
-            visUpdateCords.Add((startY, startX));
+        async Task GetFinalPath() {
+            visualizerUpdateCords.Add((startY, startX));
             
             for (botY = 1; botY <= mazeSize - 2; botY++) {
                 for (botX = 1; botX <= mazeSize - 2; botX++) {
                     if (maze[botY, botX] != freeCellPrint)
                         continue;
 
-                    visUpdateCords.Add((botY, botX));
+                    visualizerUpdateCords.Add((botY, botX));
                 }
             }
 
-            visUpdateCords.Add((mazeSize - 2, mazeSize - 1));
-            await _utils.EasyVisUpdateListManager(visUpdateCords, Colors.Red);
+            visualizerUpdateCords.Add((finishY, finishX)); 
+            finalPathLength = visualizerUpdateCords.Count;
+            
+            await _visl.UpdateVisualizerCordsBatch(visualizerUpdateCords, Colors.Red);
         }
 
         void SolveLogic() {
@@ -65,8 +68,7 @@ namespace MazeSolverVisualizer {
                         validDirNum--;
 
                     if(validDirNum == 1) {
-                        visUpdateCords.Add((botY, botX));
-                        moveHistory.Add((botY, botX));
+                        visualizerUpdateCords.Add((botY, botX));
                         maze[botY, botX] = solverPrint;
                         cellsBlockedThisRound++;
                     }

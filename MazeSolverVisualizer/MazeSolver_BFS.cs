@@ -1,6 +1,7 @@
 ﻿using System.Windows.Media;
 
-using static MazeSolverVisualizer.Data;
+using static MazeSolverVisualizer.DataGlobal;
+using static MazeSolverVisualizer.DataBFS;
 using static MazeSolverVisualizer.Utils;
 
 namespace MazeSolverVisualizer {
@@ -16,23 +17,23 @@ namespace MazeSolverVisualizer {
             while (RunLoop_Solver()) {
                 SolveLogic();
 
-                if (playSolveAnimation) {
-                    visUpdateCords.Add((current.Y, current.X));
-                    await _utils.EasyVisUpdateListManager(visUpdateCords, Colors.Green);
-                }
+                await _visl.UpdateVisualizerAtCoords((current.Y, current.X), Colors.Green);
             }
 
             while (current != null) {
-                visUpdateCords.Add((current.Y, current.X));
+                visualizerUpdateCords.Add((current.Y, current.X));
                 current = current.Parent;
             }
 
-            if (playSolveAnimation)
-                await _utils.SyncVisualizer(visUpdateCords, Colors.Red);
-            else {
-                _utils.EraseExcessSolverPrints(visUpdateCords);
-                _utils.CreateOrUpdateVisualizer();
+            finalPathLength = visualizerUpdateCords.Count;
+            await _visl.UpdateVisualizerCordsBatch(visualizerUpdateCords, Colors.Red);
+
+            if(!playAlgorithmAnimation) {
+                _utils.CleanupNotFinalPathMarks(visualizerUpdateCords);
+                _visl.CreateOrUpdateVisualizer();
             }
+
+            DataBFS.Reset();
         }
 
 
@@ -40,7 +41,6 @@ namespace MazeSolverVisualizer {
         void SolveLogic() {
 
             current = queue.Dequeue();
-
             maze[current.Y, current.X] = solverPrint;
 
             foreach (var (ny, nx) in new (int, int)[] {

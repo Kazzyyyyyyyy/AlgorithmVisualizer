@@ -1,76 +1,42 @@
 ﻿using System.Windows.Media;
 
-using static MazeSolverVisualizer.Data;
+using static MazeSolverVisualizer.DataGlobal;
+using static MazeSolverVisualizer.DataGenerator;
 using static MazeSolverVisualizer.Utils;
-using static MazeSolverVisualizer.MainWindow;
-using Accessibility;
-
 
 namespace MazeSolverVisualizer {
     public class MazeGenerator {
 
         //main
-        public static void CallGenerator() {
+        public static async Task CallGenerator() => await _mazeGenerator.Loop();
 
-            //GUI parse
-            if (int.TryParse(_mainWindow.GUI_mazeSize.Text, out int parse) && parse != mazeSize) {
-                mazeSize = parse;
-                maze = new char[mazeSize, mazeSize];
+        async Task Loop() {
 
-                finishY = mazeSize - 2; 
-                finishX = mazeSize - 1;
-            }
-            else 
-                _mainWindow.GUI_mazeSize.Text = mazeSize.ToString();
-
-            if (updateForCleanMazeVisual.Count > 0)
-                updateForCleanMazeVisual.Clear();
-
-
-            _mazeGenerator.Loop();
-        }
-
-        async void Loop() {
-
-            _utils.GenMazeArray();
-
-            botX = 1; //dont let the gen start on the border (0) bc he only checks if he CAN go there 
-                      //but if hes already there he can move freely and destroy the border
             moveHistory.Add((botY, botX));
-            maze[botY, botX] = freeCellPrint;
-
-            if(playSolveAnimation)
-                _utils.CreateOrUpdateVisualizer();
-
+            maze[botY, botX] = freeCellPrint; 
 
             while (RunLoop_Generator()) {
+                await _visl.UpdateVisualizerAtCoords((botY, botX), Colors.Gray);
+
                 MoveDirections? currDir = GetMoveDirection();
 
-                if (currDir == null) {
-                    _utils.Backtrack();
-                    if (playSolveAnimation)
-                        await _utils.EasyVisUpdateListManager(visUpdateCords, backgroundCol);
+                while(currDir == null && moveHistory.Count > 0) {
+                    _utils.Backtrack(moveHistory, ref botY, ref botX);
 
-                    continue;
+                    await _visl.UpdateVisualizerAtCoords((botY, botX), backgroundCol);
+                    currDir = GetMoveDirection();
                 }
 
-                MoveBot(currDir);
+                MoveBot(currDir, ref botY, ref botX);
                 
                 moveHistory.Add((botY, botX));
                 maze[botY, botX] = freeCellPrint;
-
-                if (playSolveAnimation) {
-                    visUpdateCords.Add((botY, botX));
-                    await _utils.EasyVisUpdateListManager(visUpdateCords, Colors.Gray);
-                }
             }
 
-            if (playSolveAnimation)
-                await _utils.EasyVisUpdateListManager(visUpdateCords, backgroundCol);
-            else
-                _utils.CreateOrUpdateVisualizer();
+            if (!playAlgorithmAnimation)
+                _visl.CreateOrUpdateVisualizer();
 
-            ResetAllVars();
+            DataGenerator.Reset();
         }
 
 
@@ -94,7 +60,7 @@ namespace MazeSolverVisualizer {
 
             //path behind wall check (dont want too many connected paths or maze will be just open
             //and not really a maze)
-            if (!easyMaze || !EasyMazeRandom()) { //maybe skips this part when easyMaze = true so
+            if (!imperfectMaze || !ImperfectMazeRandom()) { //maybe skips this part when easyMaze = true so
                                                   //it opens up the maze a little (perfect => imperfect maze)
                 if (botX >= 2 && maze[botY, botX - 2] == freeCellPrint)
                     validDir.Remove(MoveDirections.Left);
@@ -171,8 +137,8 @@ namespace MazeSolverVisualizer {
             return validDir[rndm.Next(validDir.Count)];
         }
 
-        bool EasyMazeRandom() {
-            if (rndm.Next(50) == 1) //2% chance
+        bool ImperfectMazeRandom() {
+            if (rndm.Next(50) == 1) //2% chance to remove wall
                 return true;
 
             return false;

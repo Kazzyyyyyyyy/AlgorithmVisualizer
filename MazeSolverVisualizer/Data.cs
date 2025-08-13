@@ -15,7 +15,7 @@ namespace MazeSolverVisualizer {
         Random 
     }
 
-    public class Node {
+    public class Node { //for A* and BFS 
         public int Y, X, G, H;
         public int F => G + H;
         public Node Parent;
@@ -29,13 +29,90 @@ namespace MazeSolverVisualizer {
         }
     }
 
-    public class Data {
+
+    public class DataGenerator {
         public static bool endReached = false,
-                          easyMaze = true;
+                           imperfectMaze = true;
+        public static int botY = 1, botX = 1;//DONT let the gen start on the border (0) bc he only checks if he CAN go there 
+                                             //but if hes already there he can move freely and destroy the border
+        public static List<(int y, int x)> moveHistory = new();
+
+        public static void Reset() {
+            endReached = false;
+            botY = 1; botX = 1;
+            moveHistory.Clear();
+        }
+    }
+
+    public class DataAStar {
+        public static int aStarGreed = 3;
+        public static HashSet<(int, int)> closedSet = new();
+        public static PriorityQueue<Node, int> openList = new();
+        public static Dictionary<(int, int), Node> openSet = new();
+        public static Node current = null!;
+
+        public static void Reset() {
+            current = null!;
+            closedSet.Clear();
+            openList.Clear();
+            openSet.Clear();
+        }
+    }
+
+    public class DataBFS {
+        public static Queue<Node> queue = new();
+        public static Node current = null!;
+        public static HashSet<(int, int)> closedSet = new();
+
+        public static void Reset() {
+            queue.Clear();
+            current = null!;
+            closedSet.Clear();
+        }
+    }
+
+    public class DataDeadEndFill {
+        public static int cellsBlockedThisRound = -1;
         public static int botY = 1, botX = 0;
+
+        public static void Reset() {
+            cellsBlockedThisRound = -1;
+            botY = 1; botX = 0;
+        }
+    }
+
+    public class DataRightOrLeftWind {
+        public static int botY = 1, botX = 0;
+        public static List<(int y, int x)> moveHistory = new();
+
+        public static void Reset() {
+            botY = 1; botX = 0;
+            moveHistory.Clear();
+        }
+    }
+    
+    public class DataRandomMove {
+        public static int botY = 1, botX = 0;
+
+        public static void Reset() {
+            botY = 1; botX = 0;
+        }
+    }
+
+    public class DataVisualizer {
+        public static WriteableBitmap visualBitmap = null!;
+        public static byte[] pixelArray = null!;
+        public static int animationSpeed = 100;
+        public static int bytesPerPixel = 4,
+                          cellSize = 5;
+        public static int animationRuns = 0;
+    }
+
+    public class DataGlobal {
 
         //classes 
         public static Utils _utils = new();
+        public static Visualizer _visl = new();
         public static MazeGenerator _mazeGenerator = new();
         public static MazeSolver_RightOrLeftWind _dirWind = new();
         public static MazeSolver_BFS _bfs = new();
@@ -43,51 +120,27 @@ namespace MazeSolverVisualizer {
         public static MazeSolver_DeadEndFilling _deadEndFill = new();
         public static MazeSolver_A_Star _a_Star = new();
 
+        //public algorithm
+        public enum MoveDirections { Left, Right, Up, Down }
+        public static List<MoveDirections> validDir = new();
+
         //utils 
         public static Random rndm = new();
-        public static bool playSolveAnimation = true;
-
-
-        //both
-        public static int mazeSize = 200;
-        public static int startY = 1, startX = 0,
-                          finishY = mazeSize - 2, finishX = mazeSize -1;
-
-        //A* 
-        public static int aStarGreed = 3;
-        public static HashSet<(int, int)> closedSet = new();
-        public static PriorityQueue<Node, int> openList = new();
-        public static Dictionary<(int, int), Node> openSet = new();
-
-        //BFS 
-        public static Queue<Node> queue = new();
-
-        //def
-        public static int cellsBlockedThisRound = -1;
-
-
         public static Stopwatch timer = new();
+        public static bool mazeCurrentlySolved = false;
+        public static int erasedMarkedCells = 0, finalPathLength = 0; 
 
-        public static WriteableBitmap visualBitmap = null!;
-        public static byte[] pixelArray = null!;
+        //visualizer
+        public static bool playAlgorithmAnimation = false;
+        public static List<(int y, int x)> visualizerUpdateCords = new();
         public static Color backgroundCol = (Color)ColorConverter.ConvertFromString("#3C3C3C");
-        public static int animationRoundNum = 0,
-                          animationTaskDelayIn = 100;
-        public static int bytesPerPixel = 4,
-                          cellSize = 5;
-
-
-        public enum MoveDirections { Left = 0, Right, Up, Down }
-        public static List<MoveDirections> validDir = new();
-        public static List<(int y, int x)> moveHistory = new(), 
-                                           visUpdateCords = new();
-
-        //solver specific
-        public static Node current = null!;
 
         //maze
+        public static int mazeSize = 200;
         public static char[,] maze = new char[mazeSize, mazeSize];
-        public static List<(int y, int x)> updateForCleanMazeVisual = new();
+        public static int startY = 1, startX = 0,
+                          finishY = mazeSize - 2, 
+                          finishX = mazeSize -1;
 
         //prints
         public const char freeCellPrint = ' ';

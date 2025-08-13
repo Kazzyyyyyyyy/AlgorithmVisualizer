@@ -31,23 +31,22 @@
         <TextBlock x:Name="GUI_outPut" TextWrapping="Wrap" Grid.Column="1" Margin="5, 300" FontSize="15" />
 
 
-        <!--Controlls:-->
-        <Grid x:Name="GUI_controlls" Grid.Column="1">
-
+        <!--Controls:-->
+        <Grid x:Name="GUI_controls" Grid.Column="1">
             <!--Generator-->
-            <Button x:Name="GUI_generateMaze" Click="GUI_generateMaze_Click" Content="Generate Maze" 
+            <Button x:Name="GUI_generateMaze" Click="GUI_button_Click" Content="Generate Maze" 
                     VerticalAlignment="Top" HorizontalAlignment="Left" Height="25" Margin="5" />
 
             <Button x:Name="GUI_resetMaze" Click="GUI_resetMaze_Click" Content="Clean Maze"
                     VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,5,159,0" Height="25" />
 
-            <CheckBox x:Name="GUI_easyMazeToggle" Content="Easy Maze" Click="GUI_easyMazeToggle_Click" 
+            <CheckBox x:Name="GUI_imperfectMazeToggle" Content="Imperfect Maze" Click="GUI_imperfectMazeToggle_Click" 
                       VerticalAlignment="Top" HorizontalAlignment="Left" Margin="175,12,0,0" />
 
-            <TextBox x:Name="GUI_cellSize" 
+            <TextBox x:Name="GUI_visualizerCellSize" 
                      VerticalAlignment="Top" HorizontalAlignment="Left" Width="50" Margin="5,35,0,0" />
 
-            <TextBlock x:Name="GUI_cellSizeText" Text=":Visualizer Size" 
+            <TextBlock Text=":Visualizer Size" 
                        VerticalAlignment="Top" HorizontalAlignment="Left" Margin="60,35,0,0"/>
 
             <TextBox x:Name="GUI_mazeSize" 
@@ -57,14 +56,14 @@
                        VerticalAlignment="Top" HorizontalAlignment="Left" Margin="60,56,0,0"/>
 
             <!--Solver-->
-            <Button x:Name="GUI_solve" Click="GUI_solve_Click" Content="Solve Maze" 
+            <Button x:Name="GUI_solveMaze" Click="GUI_button_Click" Content="Solve Maze" 
                     VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,97,0,0" Height="25" />
 
-            <ComboBox Name="GUI_solverSelect"
+            <ComboBox Name="GUI_solverSelector"
                   VerticalAlignment="Top" HorizontalAlignment="Left" Height="25"
                   Margin="80,96,0,0" Width="105"
                   ItemsSource="{Binding Source={StaticResource SolverAlgorithmsData}}"
-                  SelectionChanged="GUI_solverSelect_SelectionChanged" />
+                  SelectionChanged="GUI_solverSelector_SelectionChanged" />
 
             <!--A*-->
             <TextBox x:Name="GUI_AStarGreed"
@@ -73,24 +72,23 @@
             <TextBlock Text="A* greed (accuracy &lt; speed)" Name="GUI_AStarGreedText"
                        VerticalAlignment="Top" HorizontalAlignment="Left" Margin="194,127,0,0" Width="68" TextWrapping="Wrap" />
 
-            <!--Animation-->
+            <!--Animations-->
             <CheckBox x:Name="GUI_animationToggle" Content="Algorithm Animation" Click="GUI_animationToggle_Clicked" 
                       VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5, 147" IsChecked="True" />
 
-            <TextBox x:Name="GUI_animationSleep"
+            <TextBox x:Name="GUI_animationSpeed"
                      VerticalAlignment="Top" HorizontalAlignment="Left" Width="50" Margin="5, 167" />
 
-            <TextBlock Text=":Animation Speed" Name="GUI_animationSleepText"
+            <TextBlock Text=":Animation Speed" Name="GUI_animationSpeedText"
                        VerticalAlignment="Top" HorizontalAlignment="Left" Margin="60, 167" />
         </Grid>
 
 
-        <!--VISUALIZER-->
-        <ScrollViewer x:Name="GUI_scrollbar" 
-                      HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" >
+        <!--Visualizer-->
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" >
             <Canvas x:Name="GUI_visualizer" 
                     Width="2100" Height="2100" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Image x:Name="GUI_visualizerImage"/>
+                <Image x:Name="GUI_visualizerBitmap"/>
             </Canvas>
         </ScrollViewer>
     </Grid>

@@ -1,8 +1,9 @@
 ﻿using System.Windows;
 using System.Windows.Media;
 
-using static MazeSolverVisualizer.Data;
+using static MazeSolverVisualizer.DataGlobal;
 using static MazeSolverVisualizer.Utils;
+using static MazeSolverVisualizer.DataRightOrLeftWind;
 
 namespace MazeSolverVisualizer {
     public class MazeSolver_RightOrLeftWind {
@@ -12,29 +13,30 @@ namespace MazeSolverVisualizer {
         
         async Task Loop(MoveDirections windDir) {
 
+            moveHistory.Add((startY, startX));
+            maze[startY, startX] = solverPrint;
+            await _visl.UpdateVisualizerAtCoords((startY, startX), Colors.Green);
+
             while (RunLoop_Solver()) {
 
                 MoveDirections? currDir = GetMoveDirection(windDir);
 
                 while (currDir == null) {
-                    _utils.Backtrack();
+                    _utils.Backtrack(moveHistory, ref botY, ref botX);
                     currDir = GetMoveDirection(windDir);
                 }
 
+                MoveBot(currDir, ref botY, ref botX);
                 moveHistory.Add((botY, botX));
-
-                MoveBot(currDir);
                 maze[botY, botX] = solverPrint;
 
-                if (playSolveAnimation) {
-                    visUpdateCords.Add((botY, botX));
-                    await _utils.EasyVisUpdateListManager(visUpdateCords, Colors.Green);
-                }
+                await _visl.UpdateVisualizerAtCoords((botY, botX), Colors.Green);
             }
 
-            if (!playSolveAnimation)
-                _utils.CreateOrUpdateVisualizer();
+            if (!playAlgorithmAnimation)
+                _visl.CreateOrUpdateVisualizer();
 
+            DataRightOrLeftWind.Reset();
         }
 
         //deep logic
@@ -52,7 +54,7 @@ namespace MazeSolverVisualizer {
 
                 else if (botY != 0 && (maze[botY - 1, botX] == freeCellPrint))
                     return MoveDirections.Up;
-
+                
                 //backtrack 
                 return null; 
             }
