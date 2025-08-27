@@ -18,7 +18,9 @@ namespace MazeSolverVisualizer {
                 _mainWindow.GUI_AStarGreed.Text = aStarGreed.ToString();
 
 
+            timer.Start();
             await _a_Star.Loop();
+            timer.Stop();
         }
 
         async Task Loop() {

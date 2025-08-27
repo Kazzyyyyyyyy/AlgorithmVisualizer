@@ -3,44 +3,24 @@
   "WorkspaceRootPath": "C:\\Users\\staer\\source\\repos\\MazeSolverVisualizer\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{1610DB27-0441-46FC-8B81-82AFB0B0629A}|MazeSolverVisualizer\\MazeSolverVisualizer.csproj|c:\\users\\staer\\source\\repos\\mazesolvervisualizer\\mazesolvervisualizer\\visualizer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1610DB27-0441-46FC-8B81-82AFB0B0629A}|MazeSolverVisualizer\\MazeSolverVisualizer.csproj|solutionrelative:mazesolvervisualizer\\visualizer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1610DB27-0441-46FC-8B81-82AFB0B0629A}|MazeSolverVisualizer\\MazeSolverVisualizer.csproj|c:\\users\\staer\\source\\repos\\mazesolvervisualizer\\mazesolvervisualizer\\utils.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1610DB27-0441-46FC-8B81-82AFB0B0629A}|MazeSolverVisualizer\\MazeSolverVisualizer.csproj|solutionrelative:mazesolvervisualizer\\utils.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1610DB27-0441-46FC-8B81-82AFB0B0629A}|MazeSolverVisualizer\\MazeSolverVisualizer.csproj|c:\\users\\staer\\source\\repos\\mazesolvervisualizer\\mazesolvervisualizer\\mazesolver_rightorleftwind.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1610DB27-0441-46FC-8B81-82AFB0B0629A}|MazeSolverVisualizer\\MazeSolverVisualizer.csproj|solutionrelative:mazesolvervisualizer\\mazesolver_rightorleftwind.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1610DB27-0441-46FC-8B81-82AFB0B0629A}|MazeSolverVisualizer\\MazeSolverVisualizer.csproj|c:\\users\\staer\\source\\repos\\mazesolvervisualizer\\mazesolvervisualizer\\mazesolver_random.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1610DB27-0441-46FC-8B81-82AFB0B0629A}|MazeSolverVisualizer\\MazeSolverVisualizer.csproj|solutionrelative:mazesolvervisualizer\\mazesolver_random.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{1610DB27-0441-46FC-8B81-82AFB0B0629A}|MazeSolverVisualizer\\MazeSolverVisualizer.csproj|c:\\users\\staer\\source\\repos\\mazesolvervisualizer\\mazesolvervisualizer\\mazesolver_deadendfilling.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1610DB27-0441-46FC-8B81-82AFB0B0629A}|MazeSolverVisualizer\\MazeSolverVisualizer.csproj|solutionrelative:mazesolvervisualizer\\mazesolver_deadendfilling.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1610DB27-0441-46FC-8B81-82AFB0B0629A}|MazeSolverVisualizer\\MazeSolverVisualizer.csproj|c:\\users\\staer\\source\\repos\\mazesolvervisualizer\\mazesolvervisualizer\\mazesolver_rightorlefthand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1610DB27-0441-46FC-8B81-82AFB0B0629A}|MazeSolverVisualizer\\MazeSolverVisualizer.csproj|solutionrelative:mazesolvervisualizer\\mazesolver_rightorlefthand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{1610DB27-0441-46FC-8B81-82AFB0B0629A}|MazeSolverVisualizer\\MazeSolverVisualizer.csproj|c:\\users\\staer\\source\\repos\\mazesolvervisualizer\\mazesolvervisualizer\\mazesolver_bfs.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1610DB27-0441-46FC-8B81-82AFB0B0629A}|MazeSolverVisualizer\\MazeSolverVisualizer.csproj|solutionrelative:mazesolvervisualizer\\mazesolver_bfs.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1610DB27-0441-46FC-8B81-82AFB0B0629A}|MazeSolverVisualizer\\MazeSolverVisualizer.csproj|c:\\users\\staer\\source\\repos\\mazesolvervisualizer\\mazesolvervisualizer\\mazesolver_a-star.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1610DB27-0441-46FC-8B81-82AFB0B0629A}|MazeSolverVisualizer\\MazeSolverVisualizer.csproj|solutionrelative:mazesolvervisualizer\\mazesolver_a-star.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1610DB27-0441-46FC-8B81-82AFB0B0629A}|MazeSolverVisualizer\\MazeSolverVisualizer.csproj|c:\\users\\staer\\source\\repos\\mazesolvervisualizer\\mazesolvervisualizer\\mazegenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1610DB27-0441-46FC-8B81-82AFB0B0629A}|MazeSolverVisualizer\\MazeSolverVisualizer.csproj|solutionrelative:mazesolvervisualizer\\mazegenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1610DB27-0441-46FC-8B81-82AFB0B0629A}|MazeSolverVisualizer\\MazeSolverVisualizer.csproj|c:\\users\\staer\\source\\repos\\mazesolvervisualizer\\mazesolvervisualizer\\data.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1610DB27-0441-46FC-8B81-82AFB0B0629A}|MazeSolverVisualizer\\MazeSolverVisualizer.csproj|solutionrelative:mazesolvervisualizer\\data.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{1610DB27-0441-46FC-8B81-82AFB0B0629A}|MazeSolverVisualizer\\MazeSolverVisualizer.csproj|c:\\users\\staer\\source\\repos\\mazesolvervisualizer\\mazesolvervisualizer\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1610DB27-0441-46FC-8B81-82AFB0B0629A}|MazeSolverVisualizer\\MazeSolverVisualizer.csproj|solutionrelative:mazesolvervisualizer\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1610DB27-0441-46FC-8B81-82AFB0B0629A}|MazeSolverVisualizer\\MazeSolverVisualizer.csproj|c:\\users\\staer\\source\\repos\\mazesolvervisualizer\\mazesolvervisualizer\\utils.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1610DB27-0441-46FC-8B81-82AFB0B0629A}|MazeSolverVisualizer\\MazeSolverVisualizer.csproj|solutionrelative:mazesolvervisualizer\\utils.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -49,8 +29,8 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedWidth": 355,
-          "SelectedChildIndex": 8,
+          "DockedWidth": 837,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Bookmark",
@@ -58,124 +38,68 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Utils.cs",
-              "DocumentMoniker": "C:\\Users\\staer\\source\\repos\\MazeSolverVisualizer\\MazeSolverVisualizer\\Utils.cs",
-              "RelativeDocumentMoniker": "MazeSolverVisualizer\\Utils.cs",
-              "ToolTip": "C:\\Users\\staer\\source\\repos\\MazeSolverVisualizer\\MazeSolverVisualizer\\Utils.cs",
-              "RelativeToolTip": "MazeSolverVisualizer\\Utils.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAaAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-13T17:18:29.412Z"
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "MazeSolver_RightOrLeftWind.cs",
-              "DocumentMoniker": "C:\\Users\\staer\\source\\repos\\MazeSolverVisualizer\\MazeSolverVisualizer\\MazeSolver_RightOrLeftWind.cs",
-              "RelativeDocumentMoniker": "MazeSolverVisualizer\\MazeSolver_RightOrLeftWind.cs",
-              "ToolTip": "C:\\Users\\staer\\source\\repos\\MazeSolverVisualizer\\MazeSolverVisualizer\\MazeSolver_RightOrLeftWind.cs",
-              "RelativeToolTip": "MazeSolverVisualizer\\MazeSolver_RightOrLeftWind.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-13T17:18:26.192Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "MazeSolver_Random.cs",
-              "DocumentMoniker": "C:\\Users\\staer\\source\\repos\\MazeSolverVisualizer\\MazeSolverVisualizer\\MazeSolver_Random.cs",
-              "RelativeDocumentMoniker": "MazeSolverVisualizer\\MazeSolver_Random.cs",
-              "ToolTip": "C:\\Users\\staer\\source\\repos\\MazeSolverVisualizer\\MazeSolverVisualizer\\MazeSolver_Random.cs",
-              "RelativeToolTip": "MazeSolverVisualizer\\MazeSolver_Random.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-13T17:18:24.412Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "MazeSolver_DeadEndFilling.cs",
-              "DocumentMoniker": "C:\\Users\\staer\\source\\repos\\MazeSolverVisualizer\\MazeSolverVisualizer\\MazeSolver_DeadEndFilling.cs",
-              "RelativeDocumentMoniker": "MazeSolverVisualizer\\MazeSolver_DeadEndFilling.cs",
-              "ToolTip": "C:\\Users\\staer\\source\\repos\\MazeSolverVisualizer\\MazeSolverVisualizer\\MazeSolver_DeadEndFilling.cs",
-              "RelativeToolTip": "MazeSolverVisualizer\\MazeSolver_DeadEndFilling.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-13T17:18:22.222Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
               "Title": "MazeSolver_BFS.cs",
               "DocumentMoniker": "C:\\Users\\staer\\source\\repos\\MazeSolverVisualizer\\MazeSolverVisualizer\\MazeSolver_BFS.cs",
               "RelativeDocumentMoniker": "MazeSolverVisualizer\\MazeSolver_BFS.cs",
               "ToolTip": "C:\\Users\\staer\\source\\repos\\MazeSolverVisualizer\\MazeSolverVisualizer\\MazeSolver_BFS.cs",
               "RelativeToolTip": "MazeSolverVisualizer\\MazeSolver_BFS.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAowDUAAAAzAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-13T17:18:19.829Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "MazeSolver_A-Star.cs",
-              "DocumentMoniker": "C:\\Users\\staer\\source\\repos\\MazeSolverVisualizer\\MazeSolverVisualizer\\MazeSolver_A-Star.cs",
-              "RelativeDocumentMoniker": "MazeSolverVisualizer\\MazeSolver_A-Star.cs",
-              "ToolTip": "C:\\Users\\staer\\source\\repos\\MazeSolverVisualizer\\MazeSolverVisualizer\\MazeSolver_A-Star.cs",
-              "RelativeToolTip": "MazeSolverVisualizer\\MazeSolver_A-Star.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAtAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-13T17:18:08.662Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "Data.cs",
-              "DocumentMoniker": "C:\\Users\\staer\\source\\repos\\MazeSolverVisualizer\\MazeSolverVisualizer\\Data.cs",
-              "RelativeDocumentMoniker": "MazeSolverVisualizer\\Data.cs",
-              "ToolTip": "C:\\Users\\staer\\source\\repos\\MazeSolverVisualizer\\MazeSolverVisualizer\\Data.cs",
-              "RelativeToolTip": "MazeSolverVisualizer\\Data.cs",
-              "ViewState": "AgIAAHAAAAAAAAAAAAAQwIcAAABfAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-13T17:17:53.236Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Visualizer.cs",
-              "DocumentMoniker": "C:\\Users\\staer\\source\\repos\\MazeSolverVisualizer\\MazeSolverVisualizer\\Visualizer.cs",
-              "RelativeDocumentMoniker": "MazeSolverVisualizer\\Visualizer.cs",
-              "ToolTip": "C:\\Users\\staer\\source\\repos\\MazeSolverVisualizer\\MazeSolverVisualizer\\Visualizer.cs",
-              "RelativeToolTip": "MazeSolverVisualizer\\Visualizer.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAAABgAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-13T17:17:51.9Z",
+              "WhenOpened": "2025-08-15T12:32:32.948Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "MazeGenerator.cs",
-              "DocumentMoniker": "C:\\Users\\staer\\source\\repos\\MazeSolverVisualizer\\MazeSolverVisualizer\\MazeGenerator.cs",
-              "RelativeDocumentMoniker": "MazeSolverVisualizer\\MazeGenerator.cs",
-              "ToolTip": "C:\\Users\\staer\\source\\repos\\MazeSolverVisualizer\\MazeSolverVisualizer\\MazeGenerator.cs",
-              "RelativeToolTip": "MazeSolverVisualizer\\MazeGenerator.cs",
-              "ViewState": "AgIAABsAAAAAAAAAAAAowAUAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-13T17:17:37.381Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 3,
               "Title": "MainWindow.xaml.cs",
               "DocumentMoniker": "C:\\Users\\staer\\source\\repos\\MazeSolverVisualizer\\MazeSolverVisualizer\\MainWindow.xaml.cs",
               "RelativeDocumentMoniker": "MazeSolverVisualizer\\MainWindow.xaml.cs",
               "ToolTip": "C:\\Users\\staer\\source\\repos\\MazeSolverVisualizer\\MazeSolverVisualizer\\MainWindow.xaml.cs",
               "RelativeToolTip": "MazeSolverVisualizer\\MainWindow.xaml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-13T17:17:32.237Z"
+              "WhenOpened": "2025-08-14T14:33:36.959Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Utils.cs",
+              "DocumentMoniker": "C:\\Users\\staer\\source\\repos\\MazeSolverVisualizer\\MazeSolverVisualizer\\Utils.cs",
+              "RelativeDocumentMoniker": "MazeSolverVisualizer\\Utils.cs",
+              "ToolTip": "C:\\Users\\staer\\source\\repos\\MazeSolverVisualizer\\MazeSolverVisualizer\\Utils.cs",
+              "RelativeToolTip": "MazeSolverVisualizer\\Utils.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAHUAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-14T13:58:32.959Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "MazeSolver_RightOrLeftHand.cs",
+              "DocumentMoniker": "C:\\Users\\staer\\source\\repos\\MazeSolverVisualizer\\MazeSolverVisualizer\\MazeSolver_RightOrLeftHand.cs",
+              "RelativeDocumentMoniker": "MazeSolverVisualizer\\MazeSolver_RightOrLeftHand.cs",
+              "ToolTip": "C:\\Users\\staer\\source\\repos\\MazeSolverVisualizer\\MazeSolverVisualizer\\MazeSolver_RightOrLeftHand.cs",
+              "RelativeToolTip": "MazeSolverVisualizer\\MazeSolver_RightOrLeftHand.cs",
+              "ViewState": "AgIAABsAAAAAAAAAAAAowCIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-14T13:49:03.692Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MazeSolver_DeadEndFilling.cs",
+              "DocumentMoniker": "C:\\Users\\staer\\source\\repos\\MazeSolverVisualizer\\MazeSolverVisualizer\\MazeSolver_DeadEndFilling.cs",
+              "RelativeDocumentMoniker": "MazeSolverVisualizer\\MazeSolver_DeadEndFilling.cs",
+              "ToolTip": "C:\\Users\\staer\\source\\repos\\MazeSolverVisualizer\\MazeSolverVisualizer\\MazeSolver_DeadEndFilling.cs",
+              "RelativeToolTip": "MazeSolverVisualizer\\MazeSolver_DeadEndFilling.cs",
+              "ViewState": "AgIAAHIAAAAAAAAAAAAmwIYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-15T12:53:53.377Z",
+              "EditorCaption": ""
             }
           ]
         }

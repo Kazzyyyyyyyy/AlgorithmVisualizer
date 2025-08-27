@@ -20,21 +20,21 @@ namespace MazeSolverVisualizer {
             DataVisualizer.animationRuns = 0;
         }
 
-        public static void MoveBot(MoveDirections? moveDir, ref int botY, ref int botX) {
+        public static void MoveBot(Directions? moveDir, ref int botY, ref int botX) {
             switch (moveDir) {
-                case MoveDirections.Up:
+                case Directions.Up:
                     botY -= 1;
                     break;
 
-                case MoveDirections.Down:
+                case Directions.Down:
                     botY += 1;
                     break;
 
-                case MoveDirections.Left:
+                case Directions.Left:
                     botX -= 1;
                     break;
 
-                case MoveDirections.Right:
+                case Directions.Right:
                     botX += 1;
                     break;
             }
@@ -62,7 +62,7 @@ namespace MazeSolverVisualizer {
 
         //solver
         public static bool RunLoop_DeadEndFill() {
-            if (DataDeadEndFill.cellsBlockedThisRound == 0)
+            if (DataDeadEndFill.deadEndQueue.Count == 0)
                 return false; 
 
             return true;
@@ -88,7 +88,7 @@ namespace MazeSolverVisualizer {
 
 
         //Maze array management
-        public void FillMazeArray() {
+        public void FillMazeArrayWithWalls() {
             for (int height = 0; height < mazeSize; height++) {
                 for (int width = 0; width < mazeSize; width++) {
                     maze[height, width] = wallPrint;
@@ -112,22 +112,33 @@ namespace MazeSolverVisualizer {
 
         //GUI 
         public static void OutPutDataAfterRun() {
-            timer.Stop();
-            
             int visitedCells = 0;
             foreach (char c in maze) {
                 if (c == solverPrint)
                     visitedCells++;
             }
 
-            _mainWindow.GUI_outPut.Text = playAlgorithmAnimation ? $"{timer.ElapsedMilliseconds}ms (solve + animation)" : $"{timer.ElapsedMilliseconds}ms";
-            _mainWindow.GUI_outPut.Text += mazeCurrentlySolved ? $"\n{erasedMarkedCells + visitedCells}" : "";
-            _mainWindow.GUI_outPut.Text += mazeCurrentlySolved && !playAlgorithmAnimation ? $" ({visitedCells})" : "";
-            _mainWindow.GUI_outPut.Text += mazeCurrentlySolved && playAlgorithmAnimation ? $" ({finalPathLength})" : "";
-            _mainWindow.GUI_outPut.Text += mazeCurrentlySolved ? $" visited cells" : "";
+            
+            _mainWindow.GUI_outPut.Text = playAlgorithmAnimation ? $"{timer.ElapsedMilliseconds}ms (algorithm + animation)\n" : $"{timer.ElapsedMilliseconds}ms\n";
+            
+            if (mazeCurrentlySolved) {
+                if (finalPathLength == 0) 
+                    _mainWindow.GUI_outPut.Text += $"{visitedCells} visited cells";
+
+                else {
+                    if(playAlgorithmAnimation) 
+                        _mainWindow.GUI_outPut.Text += $"{visitedCells} ({finalPathLength}) visited cells";
+
+                    else
+                        _mainWindow.GUI_outPut.Text += erasedMarkedCells == 0 ? $"{visitedCells} ({finalPathLength}) visited cells"
+                            : $"{erasedMarkedCells + finalPathLength} ({finalPathLength}) visited cells";
+                }
+
+            }
 
             timer.Reset();
         }
+
 
         public void DisAndEnableControls() {
             foreach(UIElement el in _mainWindow.GUI_controls.Children) {

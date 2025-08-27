@@ -3,19 +3,27 @@
 using static MazeSolverVisualizer.Utils;
 using static MazeSolverVisualizer.DataGlobal;
 using static MazeSolverVisualizer.DataDeadEndFill;
+using static MazeSolverVisualizer.MainWindow;
 
 
 namespace MazeSolverVisualizer {
     public class MazeSolver_DeadEndFilling {
 
         //main
-        public static async Task CallSolver_DeadEndFilling() => await _deadEndFill.Loop();
+        public static async Task CallSolver_DeadEndFilling() {
+            timer.Start();
+            await _deadEndFill.Loop();
+            timer.Stop();
+        }
 
         async Task Loop() {
-            while (RunLoop_DeadEndFill()) {
-                SolveLogic();
+            GetDeadEnds();
 
-                await _visl.UpdateVisualizerCordsBatch(visualizerUpdateCords, Colors.Green);
+            while (RunLoop_DeadEndFill()) {
+
+                SolveLogic(); 
+
+                await _visl.UpdateVisualizerAtCoords(current, Colors.Green);
             }
 
             await GetFinalPath();
@@ -28,52 +36,105 @@ namespace MazeSolverVisualizer {
 
 
         //deep logic
-        async Task GetFinalPath() {
-            visualizerUpdateCords.Add((startY, startX));
-            
-            for (botY = 1; botY <= mazeSize - 2; botY++) {
-                for (botX = 1; botX <= mazeSize - 2; botX++) {
-                    if (maze[botY, botX] != freeCellPrint)
-                        continue;
+        void SolveLogic() {
+            current = deadEndQueue.Dequeue();
 
-                    visualizerUpdateCords.Add((botY, botX));
+            foreach (var (ny, nx) in new (int, int)[] {
+                    (current.Y - 1, current.X),
+                    (current.Y + 1, current.X),
+                    (current.Y, current.X - 1),
+                    (current.Y, current.X + 1) }) {
+
+                if (nx < 0 || nx >= mazeSize || maze[ny, nx] != freeCellPrint)
+                    continue;
+
+                if (IsDeadEnd(ny, nx)) {
+                    maze[ny, nx] = solverPrint;
+                    deadEndQueue.Enqueue((ny, nx));
                 }
             }
-
-            visualizerUpdateCords.Add((finishY, finishX)); 
-            finalPathLength = visualizerUpdateCords.Count;
-            
-            await _visl.UpdateVisualizerCordsBatch(visualizerUpdateCords, Colors.Red);
         }
 
-        void SolveLogic() {
-            cellsBlockedThisRound = 0;
-            for (botY = 1; botY <= mazeSize - 2; botY++) {
-                for (botX = 1; botX <= mazeSize - 2; botX++) {
-                    if (maze[botY, botX] != freeCellPrint)
+        void GetDeadEnds() {
+            for (int y = 1; y <= mazeSize - 2; y++) {
+                for (int x= 1; x <= mazeSize - 2; x++) {
+                    if (maze[y, x] != freeCellPrint)
                         continue;
 
-                    int validDirNum = 4;
-
-                    if (maze[botY - 1, botX] != freeCellPrint)
-                        validDirNum--;
-
-                    if (maze[botY + 1, botX] != freeCellPrint)
-                        validDirNum--;
-
-                    if (maze[botY, botX - 1] != freeCellPrint)
-                        validDirNum--;
-
-                    if (maze[botY, botX + 1] != freeCellPrint)
-                        validDirNum--;
-
-                    if(validDirNum == 1) {
-                        visualizerUpdateCords.Add((botY, botX));
-                        maze[botY, botX] = solverPrint;
-                        cellsBlockedThisRound++;
+                    if (IsDeadEnd(y, x)) {
+                        maze[y, x] = solverPrint;
+                        deadEndQueue.Enqueue((y, x));
                     }
                 }
             }
+        }
+
+        public bool IsDeadEnd(int y, int x) {
+            int validDirNum = 4;
+
+            if (maze[y - 1, x] != freeCellPrint)
+                validDirNum--;
+
+            if (maze[y + 1, x] != freeCellPrint)
+                validDirNum--;
+
+            if (maze[y, x - 1] != freeCellPrint)
+                validDirNum--;
+
+            if (maze[y, x + 1] != freeCellPrint)
+                validDirNum--;
+
+            if (validDirNum == 1) 
+                return true;
+
+            return false;
+        }
+
+        async Task GetFinalPath() {
+
+            if(DataGenerator.imperfectMaze) { //the cool (and acutal) backtracking doesnt work if imperfectMaze
+                                              //so we also need this lame one (DEF IS NOT MEANT TO BE USED ON IMPERFECT MAZES)
+                visualizerUpdateCords.Add((finishY, finishX));
+
+                for (int botY = mazeSize - 2; botY >= 1; botY--) {
+                    for (int botX = mazeSize - 2; botX >= 1; botX--) {
+                        if (maze[botY, botX] != freeCellPrint)
+                            continue;
+
+                        visualizerUpdateCords.Add((botY, botX));
+                    }
+                }
+
+                visualizerUpdateCords.Add((startY, startX));
+            }
+            else { //real backtracking (looks cool)
+                current.Y = finishY;
+                current.X = finishX;
+
+                visualizerUpdateCords.Add(current);
+
+                while (current.Y != startY || current.X != startX) {
+                    foreach (var (ny, nx) in new (int, int)[] {
+                    (current.Y - 1, current.X),
+                    (current.Y + 1, current.X),
+                    (current.Y, current.X - 1),
+                    (current.Y, current.X + 1) }) {
+
+                        if (ny < 0 || nx >= mazeSize || maze[ny, nx] != freeCellPrint
+                            || visualizerUpdateCords.Contains((ny, nx)))
+                            continue;
+
+                        current.Y = ny;
+                        current.X = nx;
+
+                        visualizerUpdateCords.Add((current.Y, current.X));
+                        break;
+                    }
+                }
+            }
+
+            finalPathLength = visualizerUpdateCords.Count;
+            await _visl.UpdateVisualizerCordsBatch(visualizerUpdateCords, Colors.Red);
         }
     }
 }

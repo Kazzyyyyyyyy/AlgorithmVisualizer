@@ -1,5 +1,8 @@
-﻿using System.Diagnostics;
+﻿using System.CodeDom;
+using System.Diagnostics;
+using System.Security;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -73,29 +76,32 @@ namespace MazeSolverVisualizer {
 
     public class DataDeadEndFill {
         public static int cellsBlockedThisRound = -1;
-        public static int botY = 1, botX = 0;
+        public static (int Y, int X) current;
+        public static Queue<(int, int)> deadEndQueue = new();
 
         public static void Reset() {
             cellsBlockedThisRound = -1;
-            botY = 1; botX = 0;
+            deadEndQueue.Clear();
         }
     }
 
-    public class DataRightOrLeftWind {
+    public class DataRightOrLeftHand {
+        public static (int Y, int X) botPos = (1, 0);
+        public static DataGlobal.Directions lookDir = DataGlobal.Directions.Right;
+        public static DataGlobal.Directions handSide; 
+        public static void Reset() {
+            botPos = (1, 0);
+            lookDir = DataGlobal.Directions.Right;
+        }
+    }
+    
+    public class DataRandomMove {
         public static int botY = 1, botX = 0;
         public static List<(int y, int x)> moveHistory = new();
 
         public static void Reset() {
             botY = 1; botX = 0;
             moveHistory.Clear();
-        }
-    }
-    
-    public class DataRandomMove {
-        public static int botY = 1, botX = 0;
-
-        public static void Reset() {
-            botY = 1; botX = 0;
         }
     }
 
@@ -114,15 +120,15 @@ namespace MazeSolverVisualizer {
         public static Utils _utils = new();
         public static Visualizer _visl = new();
         public static MazeGenerator _mazeGenerator = new();
-        public static MazeSolver_RightOrLeftWind _dirWind = new();
+        public static MazeSolver_RightOrLeftHand _dirHand = new();
         public static MazeSolver_BFS _bfs = new();
         public static MazeSolver_Random _random = new();
         public static MazeSolver_DeadEndFilling _deadEndFill = new();
         public static MazeSolver_A_Star _a_Star = new();
 
         //public algorithm
-        public enum MoveDirections { Left, Right, Up, Down }
-        public static List<MoveDirections> validDir = new();
+        public enum Directions { Left, Right, Up, Down }
+        public static List<Directions> validDir = new();
 
         //utils 
         public static Random rndm = new();

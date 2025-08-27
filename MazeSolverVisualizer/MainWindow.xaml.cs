@@ -18,7 +18,7 @@ namespace MazeSolverVisualizer {
 
 
             ///programm start
-            GUI_solverSelector.SelectedItem = SolverAlgorithms.AStar;
+            GUI_solverSelector.SelectedItem = SolverAlgorithms.RightHand;
             GUI_button_Click(GUI_generateMaze, null!);
             playAlgorithmAnimation = true; 
         }
@@ -55,7 +55,7 @@ namespace MazeSolverVisualizer {
             else
                 _mainWindow.GUI_animationSpeed.Text = DataVisualizer.animationSpeed.ToString();
 
-            timer.Start(); 
+            _utils.DisAndEnableControls();
 
             if ((Button)sender == GUI_generateMaze) {
                 await GeneratorManager();
@@ -66,6 +66,8 @@ namespace MazeSolverVisualizer {
 
             OutPutDataAfterRun();
             ResetGlobalVars();
+            
+            _utils.DisAndEnableControls();
         }
 
         async Task GeneratorManager() {
@@ -82,7 +84,7 @@ namespace MazeSolverVisualizer {
                 _mainWindow.GUI_mazeSize.Text = mazeSize.ToString();
 
 
-            _utils.FillMazeArray();
+            _utils.FillMazeArrayWithWalls();
 
             if (playAlgorithmAnimation)
                 _visl.CreateOrUpdateVisualizer();
@@ -105,8 +107,8 @@ namespace MazeSolverVisualizer {
                 SolverAlgorithms.AStar => MazeSolver_A_Star.CallSolver_A_Star(),
                 SolverAlgorithms.BFS => MazeSolver_BFS.CallSolver_BFS(),
                 SolverAlgorithms.DeadEndFilling => MazeSolver_DeadEndFilling.CallSolver_DeadEndFilling(),
-                SolverAlgorithms.RightHand => MazeSolver_RightOrLeftWind.CallSolver_RightOrLeftWind(MoveDirections.Right),
-                SolverAlgorithms.LeftHand => MazeSolver_RightOrLeftWind.CallSolver_RightOrLeftWind(MoveDirections.Left),
+                SolverAlgorithms.RightHand => MazeSolver_RightOrLeftHand.CallSolver_RightOrLeftHand(Directions.Right),
+                SolverAlgorithms.LeftHand => MazeSolver_RightOrLeftHand.CallSolver_RightOrLeftHand(Directions.Left),
                 SolverAlgorithms.Random => MazeSolver_Random.CallSolver_Random(),
                 _ => Task.CompletedTask
             };
@@ -117,7 +119,7 @@ namespace MazeSolverVisualizer {
 
         private void GUI_solverSelector_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if ((SolverAlgorithms)GUI_solverSelector.SelectedItem == SolverAlgorithms.DeadEndFilling && GUI_imperfectMazeToggle.IsChecked == true) {
-                GUI_outPut.Text = @"DeadEndFilling doesnt properly work if EasyMaze is on. The generator makes a 'inperfect maze' (not only 1 linear way to the finish) when checked and DeadEndFilling is made for 'perfect mazes'.";
+                GUI_outPut.Text = @"DeadEndFilling doesnt properly work if ImperfectMaze is on. The generator makes a 'imperfect maze' (more than 1 linear way to the finish) when checked and DeadEndFilling is made for 'perfect mazes'.";
                 return;
             }
             else if ((SolverAlgorithms)GUI_solverSelector.SelectedItem == SolverAlgorithms.AStar) {

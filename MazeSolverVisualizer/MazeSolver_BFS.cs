@@ -8,7 +8,11 @@ namespace MazeSolverVisualizer {
     public class MazeSolver_BFS {
 
         //main 
-        public static async Task CallSolver_BFS() => await _bfs.Loop();
+        public static async Task CallSolver_BFS() {
+            timer.Start();
+            await _bfs.Loop();
+            timer.Stop();
+        }
 
         async Task Loop() {
 
