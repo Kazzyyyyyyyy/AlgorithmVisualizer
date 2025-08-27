@@ -119,6 +119,7 @@ namespace MazeSolverVisualizer {
             }
 
             
+            //horrible code, just dont touch it, it works, trust
             _mainWindow.GUI_outPut.Text = playAlgorithmAnimation ? $"{timer.ElapsedMilliseconds}ms (algorithm + animation)\n" : $"{timer.ElapsedMilliseconds}ms\n";
             
             if (mazeCurrentlySolved) {
@@ -133,7 +134,6 @@ namespace MazeSolverVisualizer {
                         _mainWindow.GUI_outPut.Text += erasedMarkedCells == 0 ? $"{visitedCells} ({finalPathLength}) visited cells"
                             : $"{erasedMarkedCells + finalPathLength} ({finalPathLength}) visited cells";
                 }
-
             }
 
             timer.Reset();
