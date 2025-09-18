@@ -32,7 +32,6 @@ namespace MazeSolverVisualizer {
                 SolveLogic();
 
                 await _visl.UpdateVisualizerAtCoords((current.Y, current.X), Colors.Green);
-
             }
 
             while (current != null) {
@@ -41,12 +40,13 @@ namespace MazeSolverVisualizer {
             }
 
             finalPathLength = visualizerUpdateCords.Count; 
-            await _visl.UpdateVisualizerCordsBatch(visualizerUpdateCords, Colors.Red);
 
             if (!playAlgorithmAnimation) {
                 _utils.CleanupNotFinalPathMarks(visualizerUpdateCords);
                 _visl.CreateOrUpdateVisualizer();
             }
+            else
+                await _visl.UpdateVisualizerCordsBatch(visualizerUpdateCords, Colors.Red);
 
             DataAStar.Reset();
         }
@@ -82,7 +82,7 @@ namespace MazeSolverVisualizer {
                     }
                 }
                 else {
-                    var neighbor = new Node(ny, nx, tentativeG, h, current);
+                    Node neighbor = new(ny, nx, tentativeG, h, current);
                     openList.Enqueue(neighbor, neighbor.F);
                     openSet[(ny, nx)] = neighbor;
                 }

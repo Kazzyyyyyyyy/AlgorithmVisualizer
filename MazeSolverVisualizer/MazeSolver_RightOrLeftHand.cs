@@ -7,6 +7,7 @@ using static MazeSolverVisualizer.DataRightOrLeftHand;
 using static MazeSolverVisualizer.MainWindow;
 using System.Security.Principal;
 using static System.Net.Mime.MediaTypeNames;
+using System.Windows.Controls;
 
 namespace MazeSolverVisualizer {
     public class MazeSolver_RightOrLeftHand {
@@ -26,7 +27,7 @@ namespace MazeSolverVisualizer {
 
             while (RunLoop_Solver()) {
                 SolveLogic();
-
+            
                 await _visl.UpdateVisualizerAtCoords(botPos, Colors.Green);
             }
 

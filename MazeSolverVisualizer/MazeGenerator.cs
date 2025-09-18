@@ -37,6 +37,7 @@ namespace MazeSolverVisualizer {
                 maze[botY, botX] = freeCellPrint;
             }
 
+
             if (!playAlgorithmAnimation)
                 _visl.CreateOrUpdateVisualizer();
 
@@ -65,7 +66,7 @@ namespace MazeSolverVisualizer {
             //path behind wall check (dont want too many connected paths or maze will be just open
             //and not really a maze)
             if (!imperfectMaze || !ImperfectMazeRandom()) { //maybe skips this part when easyMaze = true so
-                                                  //it opens up the maze a little (perfect => imperfect maze)
+                                                            //it opens up the maze a little (perfect => imperfect maze)
                 if (botX >= 2 && maze[botY, botX - 2] == freeCellPrint)
                     validDir.Remove(Directions.Left);
 
@@ -92,7 +93,6 @@ namespace MazeSolverVisualizer {
                         if (botXTest != 0 && maze[botYTest, botXTest - 1] == freeCellPrint || 
                             botXTest != mazeSize - 1 && maze[botYTest, botXTest + 1] == freeCellPrint)
                             validDir.Remove(Directions.Up);
-
                         break;
 
                     case Directions.Down:
@@ -101,7 +101,6 @@ namespace MazeSolverVisualizer {
                         if (botXTest != 0 && maze[botYTest, botXTest - 1] == freeCellPrint ||
                             botXTest != mazeSize - 1 && maze[botYTest, botXTest + 1] == freeCellPrint)
                             validDir.Remove(Directions.Down);
-
                         break;
 
                     case Directions.Left:
@@ -110,7 +109,6 @@ namespace MazeSolverVisualizer {
                         if (botYTest != 0 && maze[botYTest - 1, botXTest] == freeCellPrint ||
                             botYTest != mazeSize - 1 && maze[botYTest + 1, botXTest] == freeCellPrint)
                             validDir.Remove(Directions.Left);
-
                         break;
 
                     case Directions.Right:
@@ -119,7 +117,6 @@ namespace MazeSolverVisualizer {
                         if (botYTest != 0 && maze[botYTest - 1, botXTest] == freeCellPrint ||
                             botYTest != mazeSize - 1 && maze[botYTest + 1, botXTest] == freeCellPrint)
                             validDir.Remove(Directions.Right);
-
                         break;
                 }
             }

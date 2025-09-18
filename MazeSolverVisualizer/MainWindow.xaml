@@ -81,6 +81,9 @@
 
             <TextBlock Text=":Animation Speed" Name="GUI_animationSpeedText"
                        VerticalAlignment="Top" HorizontalAlignment="Left" Margin="60, 167" />
+
+            <CheckBox x:Name="GUI_highlightCurrentPos" Content="Highlight current pos" Click="GUI_highlightCurrentPos_Click" 
+                      VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5, 187" IsChecked="False" />
         </Grid>
 
 

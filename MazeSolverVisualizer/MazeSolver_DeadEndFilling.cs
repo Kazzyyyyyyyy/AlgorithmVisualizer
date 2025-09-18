@@ -3,7 +3,6 @@
 using static MazeSolverVisualizer.Utils;
 using static MazeSolverVisualizer.DataGlobal;
 using static MazeSolverVisualizer.DataDeadEndFill;
-using static MazeSolverVisualizer.MainWindow;
 
 
 namespace MazeSolverVisualizer {
@@ -20,7 +19,6 @@ namespace MazeSolverVisualizer {
             GetDeadEnds();
 
             while (RunLoop_DeadEndFill()) {
-
                 SolveLogic(); 
 
                 await _visl.UpdateVisualizerAtCoords(current, Colors.Green);
@@ -33,7 +31,6 @@ namespace MazeSolverVisualizer {
 
             DataDeadEndFill.Reset();
         }
-
 
         //deep logic
         void SolveLogic() {
@@ -55,6 +52,7 @@ namespace MazeSolverVisualizer {
             }
         }
 
+
         void GetDeadEnds() {
             for (int y = 1; y <= mazeSize - 2; y++) {
                 for (int x= 1; x <= mazeSize - 2; x++) {
@@ -70,21 +68,21 @@ namespace MazeSolverVisualizer {
         }
 
         public bool IsDeadEnd(int y, int x) {
-            int validDirNum = 4;
+            int waysFound = 4;
 
             if (maze[y - 1, x] != freeCellPrint)
-                validDirNum--;
+                waysFound--;
 
             if (maze[y + 1, x] != freeCellPrint)
-                validDirNum--;
+                waysFound--;
 
             if (maze[y, x - 1] != freeCellPrint)
-                validDirNum--;
+                waysFound--;
 
             if (maze[y, x + 1] != freeCellPrint)
-                validDirNum--;
+                waysFound--;
 
-            if (validDirNum == 1) 
+            if (waysFound <= 1) 
                 return true;
 
             return false;

@@ -11,36 +11,44 @@ namespace MazeSolverVisualizer {
     public class Utils {
 
         //generall
-        public static void ResetGlobalVars() {
+        public static async Task ResetGlobalVars() {
+            if(highlightCurrentPos) {
+                await _visl.UpdateVisualizerAtCoords((highlightedPos.y, highlightedPos.x), highlightedPos.c);
+                highlightedPos = new();
+                posHighlighted = false;
+            }
+
+
             visualizerUpdateCords.Clear();
             timer.Reset();
             erasedMarkedCells = 0;
             finalPathLength = 0; 
 
             DataVisualizer.animationRuns = 0;
+
         }
 
         public static void MoveBot(Directions? moveDir, ref int botY, ref int botX) {
             switch (moveDir) {
                 case Directions.Up:
-                    botY -= 1;
+                    botY--;
                     break;
 
                 case Directions.Down:
-                    botY += 1;
+                    botY++;
                     break;
 
                 case Directions.Left:
-                    botX -= 1;
+                    botX--;
                     break;
 
                 case Directions.Right:
-                    botX += 1;
+                    botX++;
                     break;
             }
         }
 
-        public void Backtrack(List<(int y, int x)> moveHistory,ref int botY, ref int botX) {
+        public void Backtrack(List<(int y, int x)> moveHistory, ref int botY, ref int botX) {
             botY = moveHistory.Last().y;
             botX = moveHistory.Last().x;
 
@@ -53,12 +61,12 @@ namespace MazeSolverVisualizer {
             if (DataGenerator.botY == finishY && DataGenerator.botX == finishX - 1) 
                 DataGenerator.endReached = true;
 
-            if (DataGenerator.endReached && DataGenerator.moveHistory.Count == 1) 
+            if (DataGenerator.endReached && DataGenerator.moveHistory.Count == 1) {
                 return false;
-            
+            }
+
             return true;
         }
-
 
         //solver
         public static bool RunLoop_DeadEndFill() {
@@ -118,16 +126,16 @@ namespace MazeSolverVisualizer {
                     visitedCells++;
             }
 
-            
+
             //horrible code, just dont touch it, it works, trust
             _mainWindow.GUI_outPut.Text = playAlgorithmAnimation ? $"{timer.ElapsedMilliseconds}ms (algorithm + animation)\n" : $"{timer.ElapsedMilliseconds}ms\n";
-            
+
             if (mazeCurrentlySolved) {
-                if (finalPathLength == 0) 
+                if (finalPathLength == 0)
                     _mainWindow.GUI_outPut.Text += $"{visitedCells} visited cells";
 
                 else {
-                    if(playAlgorithmAnimation) 
+                    if (playAlgorithmAnimation)
                         _mainWindow.GUI_outPut.Text += $"{visitedCells} ({finalPathLength}) visited cells";
 
                     else

@@ -26,7 +26,19 @@ namespace MazeSolverVisualizer {
             if (!playAlgorithmAnimation) //put the check here so i dont have to write it 1000x
                 return;
 
-            UpdatePixels(update.Y, update.X, color);
+            if (highlightCurrentPos) {
+                UpdatePixels(update.Y, update.X, Colors.Red); //current pos highlight
+
+                if(posHighlighted)
+                    UpdatePixels(highlightedPos.y, highlightedPos.x, highlightedPos.c);
+
+                (highlightedPos.y, highlightedPos.x, highlightedPos.c) = (update.Y, update.X, color);
+                posHighlighted = true;
+            }
+            else
+                UpdatePixels(update.Y, update.X, color); 
+            
+
 
             animationRuns++;
             if (animationSpeed == 0 ||

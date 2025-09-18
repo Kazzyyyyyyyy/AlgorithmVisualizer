@@ -50,7 +50,9 @@ namespace MazeSolverVisualizer {
     public class DataAStar {
         public static int aStarGreed = 3;
         public static HashSet<(int, int)> closedSet = new();
+
         public static PriorityQueue<Node, int> openList = new();
+
         public static Dictionary<(int, int), Node> openSet = new();
         public static Node current = null!;
 
@@ -97,21 +99,20 @@ namespace MazeSolverVisualizer {
     
     public class DataRandomMove {
         public static int botY = 1, botX = 0;
-        public static List<(int y, int x)> moveHistory = new();
 
         public static void Reset() {
             botY = 1; botX = 0;
-            moveHistory.Clear();
         }
     }
 
     public class DataVisualizer {
         public static WriteableBitmap visualBitmap = null!;
         public static byte[] pixelArray = null!;
-        public static int animationSpeed = 100;
+        public static int animationSpeed = 50;
         public static int bytesPerPixel = 4,
                           cellSize = 5;
         public static int animationRuns = 0;
+        public static Color LastWantedColor;
     }
 
     public class DataGlobal {
@@ -134,10 +135,14 @@ namespace MazeSolverVisualizer {
         public static Random rndm = new();
         public static Stopwatch timer = new();
         public static bool mazeCurrentlySolved = false;
-        public static int erasedMarkedCells = 0, finalPathLength = 0; 
+        public static int erasedMarkedCells = 0, finalPathLength = 0;
 
         //visualizer
-        public static bool playAlgorithmAnimation = false;
+        public static bool playAlgorithmAnimation = false,
+                           highlightCurrentPos = false,
+                           posHighlighted = false;
+
+        public static (int y, int x, Color c) highlightedPos;
         public static List<(int y, int x)> visualizerUpdateCords = new();
         public static Color backgroundCol = (Color)ColorConverter.ConvertFromString("#3C3C3C");
 

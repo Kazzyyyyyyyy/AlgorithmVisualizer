@@ -1,4 +1,5 @@
-﻿using System.Windows.Media;
+﻿
+using System.Windows.Media;
 
 using static MazeSolverVisualizer.DataGlobal;
 using static MazeSolverVisualizer.DataBFS;
@@ -32,7 +33,7 @@ namespace MazeSolverVisualizer {
             finalPathLength = visualizerUpdateCords.Count;
             await _visl.UpdateVisualizerCordsBatch(visualizerUpdateCords, Colors.Red);
 
-            if(!playAlgorithmAnimation) {
+            if (!playAlgorithmAnimation) {
                 _utils.CleanupNotFinalPathMarks(visualizerUpdateCords);
                 _visl.CreateOrUpdateVisualizer();
             }

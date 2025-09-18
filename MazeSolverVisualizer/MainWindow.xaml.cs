@@ -18,9 +18,9 @@ namespace MazeSolverVisualizer {
 
 
             ///programm start
-            GUI_solverSelector.SelectedItem = SolverAlgorithms.RightHand;
+            GUI_solverSelector.SelectedItem = SolverAlgorithms.AStar;
             GUI_button_Click(GUI_generateMaze, null!);
-            playAlgorithmAnimation = true; 
+            playAlgorithmAnimation = true;
         }
 
         void GUIInit() {
@@ -50,22 +50,24 @@ namespace MazeSolverVisualizer {
         private async void GUI_button_Click(object sender, RoutedEventArgs e) {
 
             //animation speed parse
-            if (int.TryParse(_mainWindow.GUI_animationSpeed.Text, out int parsedSpeed))
+            if (int.TryParse(_mainWindow.GUI_animationSpeed.Text, out int parsedSpeed)) 
                 DataVisualizer.animationSpeed = parsedSpeed;
             else
                 _mainWindow.GUI_animationSpeed.Text = DataVisualizer.animationSpeed.ToString();
 
+
             _utils.DisAndEnableControls();
 
-            if ((Button)sender == GUI_generateMaze) {
+
+            if ((Button)sender == GUI_generateMaze) 
                 await GeneratorManager();
-            }
-            else if ((Button)sender == GUI_solveMaze) {
+            
+            else if ((Button)sender == GUI_solveMaze) 
                 await SolverManager();
-            }
+            
 
             OutPutDataAfterRun();
-            ResetGlobalVars();
+            await ResetGlobalVars();
             
             _utils.DisAndEnableControls();
         }
@@ -148,5 +150,8 @@ namespace MazeSolverVisualizer {
 
         private void GUI_imperfectMazeToggle_Click(object sender, RoutedEventArgs e)
             => DataGenerator.imperfectMaze = GUI_imperfectMazeToggle.IsChecked == true ? true : false;
+
+        private void GUI_highlightCurrentPos_Click(object sender, RoutedEventArgs e) 
+            => highlightCurrentPos = GUI_highlightCurrentPos.IsChecked == true ? true : false;
     }
 }
