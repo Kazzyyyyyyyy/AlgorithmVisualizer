@@ -1,37 +1,41 @@
 ﻿
 using System.Windows.Media;
 
-using static MazeSolverVisualizer.DataGlobal;
+using static MazeSolverVisualizer.DataGeneral;
 using static MazeSolverVisualizer.DataBFS;
 using static MazeSolverVisualizer.Utils;
+using static MazeSolverVisualizer.DataVisualizer;
+using static MazeSolverVisualizer.DataMaze;
 
 namespace MazeSolverVisualizer {
     public class MazeSolver_BFS {
 
         //main 
-        public static async Task CallSolver_BFS() {
-            timer.Start();
-            await _bfs.Loop();
-            timer.Stop();
-        }
+        public static async Task CallSolver_BFS() 
+            => await _bfs.Loop();
+        
 
         async Task Loop() {
+            timer.Start();
 
             queue.Enqueue(new Node(startY, startX));
 
             while (RunLoop_Solver()) {
                 SolveLogic();
 
-                await _visl.UpdateVisualizerAtCoords((current.Y, current.X), Colors.Green);
+                await _visl.UpdateVisualizerAtCoords((current.Y, current.X), solverCol);
             }
+
 
             while (current != null) {
                 visualizerUpdateCords.Add((current.Y, current.X));
                 current = current.Parent;
             }
+            
+            timer.Stop();
 
             finalPathLength = visualizerUpdateCords.Count;
-            await _visl.UpdateVisualizerCordsBatch(visualizerUpdateCords, Colors.Red);
+            await _visl.UpdateVisualizerCordsBatch(visualizerUpdateCords, csSolverFinalPathCol);
 
             if (!playAlgorithmAnimation) {
                 _utils.CleanupNotFinalPathMarks(visualizerUpdateCords);

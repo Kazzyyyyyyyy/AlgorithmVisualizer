@@ -1,26 +1,26 @@
 ﻿using System.Windows.Media;
 
-using static MazeSolverVisualizer.DataGlobal;
+using static MazeSolverVisualizer.DataGeneral;
 using static MazeSolverVisualizer.DataGenerator;
 using static MazeSolverVisualizer.Utils;
+using static MazeSolverVisualizer.DataMaze;
+using static MazeSolverVisualizer.DataVisualizer;
 
 namespace MazeSolverVisualizer {
     public class MazeGenerator {
 
         //main
-        public static async Task CallGenerator() {
-            timer.Start();
-            await _mazeGenerator.Loop();
-            timer.Stop();
-        }
-
+        public static async Task CallGenerator() 
+            => await _mazeGenerator.Loop();
+        
         async Task Loop() {
+            timer.Start();
 
             moveHistory.Add((botY, botX));
             maze[botY, botX] = freeCellPrint; 
 
             while (RunLoop_Generator()) {
-                await _visl.UpdateVisualizerAtCoords((botY, botX), Colors.Gray);
+                await _visl.UpdateVisualizerAtCoords((botY, botX), mazeGenBacktrackCol);
 
                 Directions? currDir = GetMoveDirection();
 
@@ -36,6 +36,8 @@ namespace MazeSolverVisualizer {
                 moveHistory.Add((botY, botX));
                 maze[botY, botX] = freeCellPrint;
             }
+
+            timer.Stop();
 
 
             if (!playAlgorithmAnimation)

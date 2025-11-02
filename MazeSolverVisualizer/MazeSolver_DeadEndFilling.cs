@@ -1,7 +1,9 @@
 ﻿using System.Windows.Media;
 
 using static MazeSolverVisualizer.Utils;
-using static MazeSolverVisualizer.DataGlobal;
+using static MazeSolverVisualizer.DataGeneral;
+using static MazeSolverVisualizer.DataVisualizer;
+using static MazeSolverVisualizer.DataMaze;
 using static MazeSolverVisualizer.DataDeadEndFill;
 
 
@@ -9,25 +11,28 @@ namespace MazeSolverVisualizer {
     public class MazeSolver_DeadEndFilling {
 
         //main
-        public static async Task CallSolver_DeadEndFilling() {
-            timer.Start();
-            await _deadEndFill.Loop();
-            timer.Stop();
-        }
+        public static async Task CallSolver_DeadEndFilling() 
+            => await _deadEndFill.Loop();
 
         async Task Loop() {
+            timer.Start();
+
             GetDeadEnds();
 
             while (RunLoop_DeadEndFill()) {
                 SolveLogic(); 
 
-                await _visl.UpdateVisualizerAtCoords(current, Colors.Green);
+                await _visl.UpdateVisualizerAtCoords(current, solverCol);
             }
+            
+            timer.Stop();
 
             await GetFinalPath();
 
-            if (!playAlgorithmAnimation)
-                _visl.CreateOrUpdateVisualizer();
+            if (!playAlgorithmAnimation) {
+                bool visualizeCppPath = true, solvPrintIsFinalPathCol = false;
+                _visl.CreateOrUpdateVisualizer(visualizeCppPath, solvPrintIsFinalPathCol);
+            }
 
             DataDeadEndFill.Reset();
         }
@@ -132,7 +137,7 @@ namespace MazeSolverVisualizer {
             }
 
             finalPathLength = visualizerUpdateCords.Count;
-            await _visl.UpdateVisualizerCordsBatch(visualizerUpdateCords, Colors.Red);
+            await _visl.UpdateVisualizerCordsBatch(visualizerUpdateCords, csSolverFinalPathCol);
         }
     }
 }

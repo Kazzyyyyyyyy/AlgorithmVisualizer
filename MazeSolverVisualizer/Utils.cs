@@ -2,10 +2,13 @@
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-using static MazeSolverVisualizer.DataGlobal;
+using static MazeSolverVisualizer.DataGeneral;
 using static MazeSolverVisualizer.MainWindow;
-using System.IO;
-using System.Windows.Data;
+using static MazeSolverVisualizer.DataCpp;
+using static MazeSolverVisualizer.DataMaze;
+using static MazeSolverVisualizer.DataVisualizer;
+
+
 
 namespace MazeSolverVisualizer {
     public class Utils {
@@ -25,7 +28,8 @@ namespace MazeSolverVisualizer {
             finalPathLength = 0; 
 
             DataVisualizer.animationRuns = 0;
-
+            DataVisualizer.currVisualizingFinalPath = false;
+            DataVisualizer.finalPathCellsVisualized = 0;
         }
 
         public static void MoveBot(Directions? moveDir, ref int botY, ref int botX) {
@@ -117,7 +121,6 @@ namespace MazeSolverVisualizer {
             }
         }
 
-
         //GUI 
         public static void OutPutDataAfterRun() {
             int visitedCells = 0;
@@ -127,8 +130,10 @@ namespace MazeSolverVisualizer {
             }
 
 
-            //horrible code, just dont touch it, it works, trust
-            _mainWindow.GUI_outPut.Text = playAlgorithmAnimation ? $"{timer.ElapsedMilliseconds}ms (algorithm + animation)\n" : $"{timer.ElapsedMilliseconds}ms\n";
+            //horrible code, just dont touch it, it works, trust                                                                                                                                                                                                                                                                                                          im sry :/
+            _mainWindow.GUI_outPut.Text = playAlgorithmAnimation ? $"C#: {timer.ElapsedMilliseconds}ms (algorithm + animation)\n" : $"C#: {timer.ElapsedMilliseconds}ms\n";
+            if (runCppAlgorithm && mazeCurrentlySolved)
+                _mainWindow.GUI_outPut.Text += "C++: " + (cppError.Length > 0 ? cppError : $"{cppTime / 1000} ms\n");
 
             if (mazeCurrentlySolved) {
                 if (finalPathLength == 0)
@@ -151,12 +156,9 @@ namespace MazeSolverVisualizer {
         public void DisAndEnableControls() {
             foreach(UIElement el in _mainWindow.GUI_controls.Children) {
                 if (el == _mainWindow.GUI_animationSpeed)
-                    continue; 
+                    continue;
 
-                if (el.IsEnabled)
-                    el.IsEnabled = false; 
-                else 
-                    el.IsEnabled = true;
+                el.IsEnabled = el.IsEnabled ? false : true;
             }
         }
     }

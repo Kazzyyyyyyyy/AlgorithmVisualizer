@@ -3,8 +3,9 @@ using System.Windows.Media;
 using System.Windows;
 
 using static MazeSolverVisualizer.DataVisualizer;
-using static MazeSolverVisualizer.DataGlobal;
+using static MazeSolverVisualizer.DataMaze;
 using static MazeSolverVisualizer.MainWindow;
+using static MazeSolverVisualizer.DataCpp;
 
 
 namespace MazeSolverVisualizer {
@@ -18,16 +19,27 @@ namespace MazeSolverVisualizer {
             foreach (var (y, x) in updateCords) {
                 await UpdateVisualizerAtCoords((y, x), color);
             }
+
             updateCords.Clear();
         }
 
         public async Task UpdateVisualizerAtCoords((int Y, int X) update, Color color) {
-
+            
             if (!playAlgorithmAnimation) //put the check here so i dont have to write it 1000x
                 return;
 
-            if (highlightCurrentPos) {
-                UpdatePixels(update.Y, update.X, Colors.Red); //current pos highlight
+            if(runCppAlgorithm && currVisualizingFinalPath && cppFinalPathList.Count > 0) {
+                if (cppFinalPathList[finalPathCellsVisualized] == update)
+                    UpdatePixels(update.Y, update.X, bothSolversFinalPathCol); //change color to show C++/C# match cells
+                else {
+                    UpdatePixels(update.Y, update.X, color);                                                                                          //display both paths 
+                    UpdatePixels(cppFinalPathList[finalPathCellsVisualized].y, cppFinalPathList[finalPathCellsVisualized].x, cppSolverFinalPathCol);  //individually
+                }
+
+                finalPathCellsVisualized++; //both paths are always the same length even if they dont match cells, so we do this to keep track of where we are in the cpp path
+            }
+            else if (highlightCurrentPos) {
+                UpdatePixels(update.Y, update.X, solverPosHighlightCol); //current pos highlight
 
                 if(posHighlighted)
                     UpdatePixels(highlightedPos.y, highlightedPos.x, highlightedPos.c);
@@ -36,9 +48,10 @@ namespace MazeSolverVisualizer {
                 posHighlighted = true;
             }
             else
-                UpdatePixels(update.Y, update.X, color); 
-            
+                UpdatePixels(update.Y, update.X, color);
 
+            if (update.Y == finishY && update.X == finishX)
+                currVisualizingFinalPath = true; 
 
             animationRuns++;
             if (animationSpeed == 0 ||
@@ -66,13 +79,13 @@ namespace MazeSolverVisualizer {
             );
         }
 
-        Color GetColorForChar(char c) => c switch {
-            wallPrint => Colors.White,
-            solverPrint => Colors.Green,
+        Color GetColorForChar(char c, bool solvPrintIsFinalPathCol) => c switch {
+            wallPrint => wallCol,
+            solverPrint => solvPrintIsFinalPathCol ? csSolverFinalPathCol : solverCol,
             _ => backgroundCol
         };
 
-        public void CreateOrUpdateVisualizer() {
+        public void CreateOrUpdateVisualizer(bool visualizeCppPath = true, bool solvPrintIsFinalPathCol = true) {
 
             //Visualizer size parse
             if (int.TryParse(_mainWindow.GUI_visualizerCellSize.Text, out int parse)) {
@@ -97,7 +110,14 @@ namespace MazeSolverVisualizer {
             //update whole visualizer
             for (int y = 0; y < mazeSize; y++) {
                 for (int x = 0; x < mazeSize; x++) {
-                    Color color = GetColorForChar(maze[y, x]);
+                    Color color = GetColorForChar(maze[y, x], solvPrintIsFinalPathCol);
+
+                    if(visualizeCppPath && cppFinalPathHashSet.Count > 0 && cppFinalPathHashSet.Contains((y, x))) {
+                        if (color == csSolverFinalPathCol)
+                            color = bothSolversFinalPathCol;
+                        else
+                            color = cppSolverFinalPathCol;
+                    }
 
                     for (int ty = 0; ty < cellSize; ty++) {
                         for (int tx = 0; tx < cellSize; tx++) {
@@ -119,6 +139,5 @@ namespace MazeSolverVisualizer {
                 pixelArray, visualBitmap.PixelWidth * bytesPerPixel, 0
             );
         }
-
     }
 }

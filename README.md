@@ -10,8 +10,6 @@ Originally, I made the Maze Generation algorithm and the Right-Hand Rule algorit
 Then I decided to scale up to a WPF application with animations, controls, and even more algorithms. 
 In the end, theres one Gen algorithm and five solve algorithms (A*, BFS, DeadEndFill, Right/LeftHand and Random).
 
-It took me about 20 days, coding 4-6 hours a day, to bring the project to this point.
-
 
 As always, I tried to do as much as possible myself. 
 The generation, Random, and Right/LeftHand algorithms were all made 100% by myself (idea and coding) without any Googling. 
@@ -36,3 +34,26 @@ And it runs very well now.
 I learned a lot in this project, especially about clean and maintainable code, and of course about algorithms (which are very fun).
 
 Like I said; if you want to add something to the program yourself, feel free to do that!
+
+---------------------------------------------------
+
+# C++ Update (yes, I know now how to use README´s)
+
+## New Features
+ - MemoryMappedFile for C#/C++ interop
+ - Live data interop for visualiziation and comparing in GUI (can be turned off) 
+ - C++ ultra optimized BFS algorithm
+ 
+## What Iv'e learned 
+ - Working with (temporary) MMF´s
+ - Multi-language interop and data management
+ - Working with pure memory (bytes, correct offset calculation, size of datatypes, differences in datatypes between C# and C++)
+ - Optimization rules and methods for basic code and especially BFS/Algorithms
+
+## Personal notes
+The plan was to port all algorithms from the C# project to C++, so you can compare every algorithm. But thats not really worth it. 
+I learned everyhing there is to learn from this project. I made BFS, optimized it to the last bit and integrated it into the C# project. 
+There is no real point in doing the same, but with 4 more algorithms just to "complete it", so I ended the project here. 
+
+## Notes
+ - C++ compiler flags: g++ -O3 -march=native -mtune=native -flto -funroll-loops -ftree-vectorize -fstrict-aliasing -ffast-math -fomit-frame-pointer (main.cpp -o algo.exe)

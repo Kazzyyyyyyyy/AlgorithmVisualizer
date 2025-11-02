@@ -1,14 +1,20 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using static MazeSolverVisualizer.DataGlobal;
+using static MazeSolverVisualizer.DataGeneral;
 using static MazeSolverVisualizer.Utils;
+using static MazeSolverVisualizer.DataCpp;
+using static MazeSolverVisualizer.DataAStar;
+using static MazeSolverVisualizer.DataVisualizer;
+using static MazeSolverVisualizer.DataMaze;
+using System.Windows.Media;
+using System.IO;
 
 
 namespace MazeSolverVisualizer {
 
     public partial class MainWindow : Window {
 
-        //main        
+        //main
         public static MainWindow _mainWindow { get; private set; } = null!;
 
         public MainWindow() {
@@ -38,6 +44,10 @@ namespace MazeSolverVisualizer {
             GUI_imperfectMazeToggle.IsChecked = DataGenerator.imperfectMaze ? true : false;
 
             GUI_AStarGreed.Text = DataAStar.aStarGreed.ToString();
+
+            GUI_csColorDisplay.Background = new SolidColorBrush(csSolverFinalPathCol);
+            GUI_cppColorDisplay.Background = new SolidColorBrush(cppSolverFinalPathCol);
+            GUI_bothColorDisplay.Background = new SolidColorBrush(bothSolversFinalPathCol);
         }
 
 
@@ -58,13 +68,11 @@ namespace MazeSolverVisualizer {
 
             _utils.DisAndEnableControls();
 
-
-            if ((Button)sender == GUI_generateMaze) 
+            if ((Button)sender == GUI_generateMaze)
                 await GeneratorManager();
-            
-            else if ((Button)sender == GUI_solveMaze) 
+
+            else if ((Button)sender == GUI_solveMaze)
                 await SolverManager();
-            
 
             OutPutDataAfterRun();
             await ResetGlobalVars();
@@ -73,6 +81,9 @@ namespace MazeSolverVisualizer {
         }
 
         async Task GeneratorManager() {
+
+            cppFinalPathHashSet.Clear();
+            cppFinalPathList.Clear();
 
             //maze size parse
             if (int.TryParse(_mainWindow.GUI_mazeSize.Text, out int parsedSize) && parsedSize != mazeSize) {
@@ -101,9 +112,14 @@ namespace MazeSolverVisualizer {
             if (mazeCurrentlySolved) {
                 _utils.CleanupMazeArray();
 
-                if (playAlgorithmAnimation)
-                    _visl.CreateOrUpdateVisualizer();
+                if (playAlgorithmAnimation) {
+                    bool visualizeCppPath = false;
+                    _visl.CreateOrUpdateVisualizer(visualizeCppPath);
+                }
             }
+
+            if (runCppAlgorithm && cppFinalPathHashSet.Count == 0)
+                MMFManager.CallMemoryTransfer(); //run c++ and get data
 
             var solver = GUI_solverSelector.SelectedItem switch {
                 SolverAlgorithms.AStar => MazeSolver_A_Star.CallSolver_A_Star(),
@@ -120,6 +136,20 @@ namespace MazeSolverVisualizer {
         }
 
         private void GUI_solverSelector_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            GUI_outPut.Text = "";
+
+            //BFS is the only algorithm I made in C++
+            if ((SolverAlgorithms)GUI_solverSelector.SelectedItem == SolverAlgorithms.BFS) {
+                GUI_runCppAlgorithm.IsEnabled = true;
+                runCppAlgorithm = (bool)GUI_runCppAlgorithm.IsChecked!;
+            }
+            else {
+                runCppAlgorithm = false;
+                GUI_runCppAlgorithm.IsEnabled = false;
+                cppFinalPathHashSet.Clear();
+                cppFinalPathList.Clear();
+            }
+
             if ((SolverAlgorithms)GUI_solverSelector.SelectedItem == SolverAlgorithms.DeadEndFilling && GUI_imperfectMazeToggle.IsChecked == true) {
                 GUI_outPut.Text = @"DeadEndFilling doesnt properly work if ImperfectMaze is on. The generator makes a 'imperfect maze' (more than 1 linear way to the finish) when checked and DeadEndFilling is made for 'perfect mazes'.";
                 return;
@@ -130,7 +160,6 @@ namespace MazeSolverVisualizer {
                 return;
             }
 
-            GUI_outPut.Text = "";
             GUI_AStarGreed.Visibility = Visibility.Collapsed;
             GUI_AStarGreedText.Visibility = Visibility.Collapsed;
         }
@@ -153,5 +182,13 @@ namespace MazeSolverVisualizer {
 
         private void GUI_highlightCurrentPos_Click(object sender, RoutedEventArgs e) 
             => highlightCurrentPos = GUI_highlightCurrentPos.IsChecked == true ? true : false;
+
+        private void GUI_runCppAlgorithm_Click(object sender, RoutedEventArgs e) {
+            runCppAlgorithm = GUI_runCppAlgorithm.IsChecked == true ? true : false;
+            if(!runCppAlgorithm) {
+                cppFinalPathList.Clear();
+                cppFinalPathHashSet.Clear();
+            }
+        }
     }
 }

@@ -2,24 +2,25 @@
 using System.Windows.Media;
 
 using static MazeSolverVisualizer.Utils;
-using static MazeSolverVisualizer.DataGlobal;
+using static MazeSolverVisualizer.DataGeneral;
+using static MazeSolverVisualizer.DataVisualizer;
+using static MazeSolverVisualizer.DataMaze;
 using static MazeSolverVisualizer.DataRandomMove;
-using System.ComponentModel.DataAnnotations;
 
 
 namespace MazeSolverVisualizer {
     public class MazeSolver_Random {
 
         //main 
-        public static async Task CallSolver_Random() {
-            timer.Start();
-            await _random.Loop();
-            timer.Stop();
-        }
+        public static async Task CallSolver_Random()
+            => await _random.Loop();
+        
 
         async Task Loop() {
+            timer.Start();
+
             maze[startY, startX] = solverPrint;
-            await _visl.UpdateVisualizerAtCoords((startY, startX), Colors.Green);
+            await _visl.UpdateVisualizerAtCoords((startY, startX), solverCol);
 
             while (RunLoop_Solver()) {
                 Directions currDir = GetMoveDirection();
@@ -27,8 +28,10 @@ namespace MazeSolverVisualizer {
                 MoveBot(currDir, ref botY, ref botX);
                 maze[botY, botX] = solverPrint;
 
-                await _visl.UpdateVisualizerAtCoords((botY, botX), Colors.Green);
+                await _visl.UpdateVisualizerAtCoords((botY, botX), solverCol);
             }
+
+            timer.Stop();
 
             if (!playAlgorithmAnimation)
                 _visl.CreateOrUpdateVisualizer();

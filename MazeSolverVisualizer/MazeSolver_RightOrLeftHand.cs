@@ -1,35 +1,34 @@
 ﻿using System.Windows;
 using System.Windows.Media;
 
-using static MazeSolverVisualizer.DataGlobal;
+using static MazeSolverVisualizer.DataGeneral;
 using static MazeSolverVisualizer.Utils;
 using static MazeSolverVisualizer.DataRightOrLeftHand;
-using static MazeSolverVisualizer.MainWindow;
-using System.Security.Principal;
-using static System.Net.Mime.MediaTypeNames;
-using System.Windows.Controls;
+using static MazeSolverVisualizer.DataMaze;
+using static MazeSolverVisualizer.DataVisualizer;
 
 namespace MazeSolverVisualizer {
     public class MazeSolver_RightOrLeftHand {
 
         //main
         public static async Task CallSolver_RightOrLeftHand(Directions side) {
-            timer.Start();
             handSide = side;
             await _dirHand.Loop();
-            timer.Stop();
         }
 
         async Task Loop() {
+            timer.Start();
 
             maze[startY, startX] = solverPrint;
-            await _visl.UpdateVisualizerAtCoords((startY, startX), Colors.Green);
+            await _visl.UpdateVisualizerAtCoords((startY, startX), csSolverFinalPathCol);
 
             while (RunLoop_Solver()) {
                 SolveLogic();
             
-                await _visl.UpdateVisualizerAtCoords(botPos, Colors.Green);
+                await _visl.UpdateVisualizerAtCoords(botPos, csSolverFinalPathCol);
             }
+
+            timer.Stop();
 
             if (!playAlgorithmAnimation)
                 _visl.CreateOrUpdateVisualizer();

@@ -1,8 +1,10 @@
 ﻿using System.Windows.Media;
-using static MazeSolverVisualizer.DataGlobal;
+using static MazeSolverVisualizer.DataGeneral;
 using static MazeSolverVisualizer.DataAStar;
 using static MazeSolverVisualizer.Utils;
 using static MazeSolverVisualizer.MainWindow;
+using static MazeSolverVisualizer.DataVisualizer;
+using static MazeSolverVisualizer.DataMaze;
 
 
 namespace MazeSolverVisualizer {
@@ -17,13 +19,12 @@ namespace MazeSolverVisualizer {
             else
                 _mainWindow.GUI_AStarGreed.Text = aStarGreed.ToString();
 
-
-            timer.Start();
             await _a_Star.Loop();
-            timer.Stop();
         }
 
         async Task Loop() {
+
+            timer.Start();
 
             var startNode = new Node(startY, startX, 0, Heuristic(startY, startX));
             openList.Enqueue(startNode, startNode.F);
@@ -31,13 +32,15 @@ namespace MazeSolverVisualizer {
             while (RunLoop_Solver()) {
                 SolveLogic();
 
-                await _visl.UpdateVisualizerAtCoords((current.Y, current.X), Colors.Green);
+                await _visl.UpdateVisualizerAtCoords((current.Y, current.X), solverCol);
             }
 
             while (current != null) {
                 visualizerUpdateCords.Add((current.Y, current.X));
                 current = current.Parent;
             }
+            
+            timer.Stop();
 
             finalPathLength = visualizerUpdateCords.Count; 
 
@@ -46,7 +49,7 @@ namespace MazeSolverVisualizer {
                 _visl.CreateOrUpdateVisualizer();
             }
             else
-                await _visl.UpdateVisualizerCordsBatch(visualizerUpdateCords, Colors.Red);
+                await _visl.UpdateVisualizerCordsBatch(visualizerUpdateCords, csSolverFinalPathCol);
 
             DataAStar.Reset();
         }

@@ -26,11 +26,19 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-
-        <!--output-->
+        <!--information-->
         <TextBlock x:Name="GUI_outPut" TextWrapping="Wrap" Grid.Column="1" Margin="5, 300" FontSize="15" />
+        
+        <TextBlock Text="C#:" Grid.Column="1" FontSize="10" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5, 35"/>
+        <Grid Grid.Column="1" x:Name="GUI_csColorDisplay" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="21, 36" Width="10" Height="10"/>
 
-
+        <TextBlock Text="C++:" Grid.Column="1" FontSize="10" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5, 20"/>
+        <Grid Grid.Column="1" x:Name="GUI_cppColorDisplay" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="30, 21" Width="10" Height="10"/>
+        
+        <TextBlock Text="Both:" Grid.Column="1" FontSize="10" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5, 5"/>
+        <Grid Grid.Column="1" x:Name="GUI_bothColorDisplay" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="30, 6" Width="10" Height="10"/>
+        
+        
         <!--Controls:-->
         <Grid x:Name="GUI_controls" Grid.Column="1">
             <!--Generator-->
@@ -84,6 +92,9 @@
 
             <CheckBox x:Name="GUI_highlightCurrentPos" Content="Highlight current pos" Click="GUI_highlightCurrentPos_Click" 
                       VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5, 187" IsChecked="False" />
+            
+            <CheckBox x:Name="GUI_runCppAlgorithm" Content="Run C++ algorithm" Click="GUI_runCppAlgorithm_Click"
+                    VerticalAlignment="Top" HorizontalAlignment="Left" IsChecked="True" Margin="5,126,0,0" IsEnabled="False" />
         </Grid>
 
 
