@@ -19,7 +19,7 @@ class BFS {
         const int currX = curr % mazeSize;
 
 
-        const int down = (currY - 1) * mazeSize + currX;
+        const int down = (currY + 1) * mazeSize + currX;
         if(maze[down] == ' ') {
           path[down] = curr;
           queue[queTail++] = down;
@@ -33,7 +33,7 @@ class BFS {
           maze[right] = '.';
         }
 
-        const int up = (currY + 1) * mazeSize + currX;
+        const int up = (currY - 1) * mazeSize + currX;
         if(maze[up] == ' ') {
           path[up] = curr;
           queue[queTail++] = up;
