@@ -7,7 +7,6 @@ using static MazeSolverVisualizer.DataGeneral;
 using static MazeSolverVisualizer.DataMMF;
 using static MazeSolverVisualizer.DataMaze;
 using static MazeSolverVisualizer.DataCpp;
-using static MazeSolverVisualizer.DataVisualizer;
 using System.Reflection;
 
 namespace MazeSolverVisualizer {
@@ -19,7 +18,6 @@ namespace MazeSolverVisualizer {
         
 
         void MMFOperation() {
-
             try {
                 int size = mazeSize * mazeSize + 22; //mazeSize * mazeSize for the maze, 12 for the struct and extra 10 bytes just to make sure its enough
                 using (var mmf = MemoryMappedFile.CreateNew(name, size, MemoryMappedFileAccess.ReadWrite)) {

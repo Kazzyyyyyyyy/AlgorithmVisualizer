@@ -46,7 +46,7 @@
                     VerticalAlignment="Top" HorizontalAlignment="Left" Height="25" Margin="5" />
 
             <Button x:Name="GUI_resetMaze" Click="GUI_resetMaze_Click" Content="Clean Maze"
-                    VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,5,159,0" Height="25" />
+                    VerticalAlignment="Top" HorizontalAlignment="left" Margin="100,5,0,0" Height="25" />
 
             <CheckBox x:Name="GUI_imperfectMazeToggle" Content="Imperfect Maze" Click="GUI_imperfectMazeToggle_Click" 
                       VerticalAlignment="Top" HorizontalAlignment="Left" Margin="175,12,0,0" />
