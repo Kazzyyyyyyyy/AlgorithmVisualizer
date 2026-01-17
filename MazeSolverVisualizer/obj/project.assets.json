@@ -8,23 +8,23 @@
     "net8.0-windows7.0": []
   },
   "packageFolders": {
-    "C:\\Users\\staer\\.nuget\\packages\\": {},
+    "C:\\Users\\Kazzy\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\staer\\source\\repos\\MazeSolverVisualizer\\MazeSolverVisualizer\\MazeSolverVisualizer.csproj",
+      "projectUniqueName": "C:\\Users\\Kazzy\\Desktop\\GitHub\\AlgorithmVisualizer\\MazeSolverVisualizer\\MazeSolverVisualizer.csproj",
       "projectName": "MazeSolverVisualizer",
-      "projectPath": "C:\\Users\\staer\\source\\repos\\MazeSolverVisualizer\\MazeSolverVisualizer\\MazeSolverVisualizer.csproj",
-      "packagesPath": "C:\\Users\\staer\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\staer\\source\\repos\\MazeSolverVisualizer\\MazeSolverVisualizer\\obj\\",
+      "projectPath": "C:\\Users\\Kazzy\\Desktop\\GitHub\\AlgorithmVisualizer\\MazeSolverVisualizer\\MazeSolverVisualizer.csproj",
+      "packagesPath": "C:\\Users\\Kazzy\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Kazzy\\Desktop\\GitHub\\AlgorithmVisualizer\\MazeSolverVisualizer\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\staer\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Kazzy\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -33,6 +33,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -51,7 +52,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.100"
+      "SdkAnalysisLevel": "10.0.100"
     },
     "frameworks": {
       "net8.0-windows7.0": {
@@ -67,6 +68,24 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[8.0.23, 8.0.23]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Host.win-x64",
+            "version": "[8.0.23, 8.0.23]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[8.0.23, 8.0.23]"
+          },
+          {
+            "name": "Microsoft.WindowsDesktop.App.Ref",
+            "version": "[8.0.23, 8.0.23]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
@@ -75,7 +94,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.103/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.102/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

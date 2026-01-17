@@ -4,16 +4,16 @@
 winexe
 C#
 .cs
-C:\Users\staer\source\repos\MazeSolverVisualizer\MazeSolverVisualizer\obj\Debug\net8.0-windows\
+C:\Users\Kazzy\Desktop\GitHub\AlgorithmVisualizer\MazeSolverVisualizer\obj\Debug\net8.0-windows\
 MazeSolverVisualizer
 none
 false
-TRACE;DEBUG;NET;NET8_0;NETCOREAPP
-C:\Users\staer\source\repos\MazeSolverVisualizer\MazeSolverVisualizer\App.xaml
+TRACE;DEBUG;NET;NET8_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
+C:\Users\Kazzy\Desktop\GitHub\AlgorithmVisualizer\MazeSolverVisualizer\App.xaml
 11407045341
 
 14-1517408019
-1981839832580
+198802185802
 MainWindow.xaml;
 
 False
