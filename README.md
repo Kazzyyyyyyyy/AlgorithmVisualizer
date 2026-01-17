@@ -26,4 +26,15 @@ There is no real point in doing the same, but with 4 more algorithms just to "co
 ```
  g++ -O3 -march=native -mtune=native -flto -funroll-loops -ftree-vectorize -fstrict-aliasing -ffast-math -fomit-frame-pointer (main.cpp -o algo.exe)
 ```
- 
+
+**generating an imperfect 200x200 maze:**
+![1](https://github.com/user-attachments/assets/e3c9dc2e-a426-4f03-a0cb-2ee830cec3ee)
+
+**bigger maze without animation:**
+![2](https://github.com/user-attachments/assets/e217f856-211b-4bc3-a681-80172440673b)
+
+**BFS solve animation and C++/C# comparison:**
+![3](https://github.com/user-attachments/assets/36fe2eb8-67b9-49a5-ba28-3ca6a9c2c6ad)
+
+**all algorithms once:**
+![4](https://github.com/user-attachments/assets/921d5946-52cb-4c31-b6b4-d615e30ba6d4)
