@@ -27,6 +27,9 @@ There is no real point in doing the same, but with 4 more algorithms just to "co
  g++ -O3 -march=native -mtune=native -flto -funroll-loops -ftree-vectorize -fstrict-aliasing -ffast-math -fomit-frame-pointer (main.cpp -o algo.exe)
 ```
 
+## GIF's
+**Please note that all these are GIF's, so they lag because of that, not because of the programm. The programm runs butter smooth** 
+
 **generating an imperfect 200x200 maze:**
 ![1](https://github.com/user-attachments/assets/e3c9dc2e-a426-4f03-a0cb-2ee830cec3ee)
 
